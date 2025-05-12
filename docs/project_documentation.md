@@ -148,35 +148,320 @@ Payment processing:
 
 ## API Documentation
 
+### Common Response Format
+All API endpoints follow a standard response format:
+
+```json
+{
+  "success": true,
+  "data": {},
+  "message": "Operation successful",
+  "errors": []
+}
+```
+
+### Error Response Format
+When an error occurs, the response will follow this format:
+
+```json
+{
+  "success": false,
+  "message": "Error description",
+  "errors": [
+    {
+      "field": "fieldName",
+      "message": "Specific error message"
+    }
+  ]
+}
+```
+
 ### Authentication Endpoints
-- POST `/api/auth/register` - User registration
-- POST `/api/auth/login` - User login
-- GET `/api/auth/me` - Get current user profile
+
+#### User Registration
+- **POST** `/api/auth/register`
+- **Description**: Register a new user account
+- **Auth Required**: No
+- **Request Body**:
+```json
+{
+  "email": "user@example.com",
+  "password": "securePassword123",
+  "firstName": "John",
+  "lastName": "Doe",
+  "phone": "+1234567890"
+}
+```
+- **Success Response** (201 Created):
+```json
+{
+  "success": true,
+  "data": {
+    "userId": "user123",
+    "email": "user@example.com",
+    "firstName": "John",
+    "lastName": "Doe"
+  },
+  "message": "Registration successful"
+}
+```
+
+#### User Login
+- **POST** `/api/auth/login`
+- **Description**: Authenticate user and receive JWT token
+- **Auth Required**: No
+- **Request Body**:
+```json
+{
+  "email": "user@example.com",
+  "password": "securePassword123"
+}
+```
+- **Success Response** (200 OK):
+```json
+{
+  "success": true,
+  "data": {
+    "token": "eyJhbGciOiJIUzI1NiIs...",
+    "user": {
+      "userId": "user123",
+      "email": "user@example.com",
+      "role": "user"
+    }
+  },
+  "message": "Login successful"
+}
+```
+
+#### Get User Profile
+- **GET** `/api/auth/me`
+- **Description**: Retrieve current user's profile
+- **Auth Required**: Yes (JWT Token)
+- **Headers**: `Authorization: Bearer <token>`
+- **Success Response** (200 OK):
+```json
+{
+  "success": true,
+  "data": {
+    "userId": "user123",
+    "email": "user@example.com",
+    "firstName": "John",
+    "lastName": "Doe",
+    "role": "user",
+    "createdAt": "2023-01-01T00:00:00Z"
+  },
+  "message": "Profile retrieved successfully"
+}
+```
 
 ### Services Endpoints
-- GET `/api/services` - List all services
-- POST `/api/services` - Create new service (admin)
-- GET `/api/services/:id` - Get service details
-- PATCH `/api/services/:id` - Update service (admin)
-- DELETE `/api/services/:id` - Delete service (admin)
-- POST `/api/services/categories` - Create category (admin)
-- GET `/api/services/categories` - List categories
+
+#### List All Services
+- **GET** `/api/services`
+- **Description**: Retrieve all available services with pagination
+- **Auth Required**: No
+- **Query Parameters**:
+  - `page` (optional): Page number (default: 1)
+  - `limit` (optional): Items per page (default: 10)
+  - `category` (optional): Filter by category ID
+  - `search` (optional): Search term
+  - `minPrice` (optional): Minimum price filter
+  - `maxPrice` (optional): Maximum price filter
+- **Success Response** (200 OK):
+```json
+{
+  "success": true,
+  "data": {
+    "services": [
+      {
+        "id": "service123",
+        "name": "Premium Service",
+        "description": "Detailed service description",
+        "price": 99.99,
+        "duration": 60,
+        "categoryId": "cat123"
+      }
+    ],
+    "pagination": {
+      "total": 100,
+      "page": 1,
+      "limit": 10,
+      "pages": 10
+    }
+  },
+  "message": "Services retrieved successfully"
+}
+```
+
+#### Create Service (Admin)
+- **POST** `/api/services`
+- **Description**: Create a new service
+- **Auth Required**: Yes (Admin only)
+- **Headers**: `Authorization: Bearer <token>`
+- **Request Body**:
+```json
+{
+  "name": "Premium Service",
+  "description": "Detailed service description",
+  "price": 99.99,
+  "duration": 60,
+  "categoryId": "cat123",
+  "features": ["feature1", "feature2"]
+}
+```
+- **Success Response** (201 Created):
+```json
+{
+  "success": true,
+  "data": {
+    "id": "service123",
+    "name": "Premium Service",
+    "description": "Detailed service description",
+    "price": 99.99,
+    "duration": 60,
+    "categoryId": "cat123",
+    "features": ["feature1", "feature2"]
+  },
+  "message": "Service created successfully"
+}
+```
 
 ### Orders Endpoints
-- POST `/api/orders` - Create new order
-- GET `/api/orders` - List orders
-- GET `/api/orders/:id` - Get order details
-- PATCH `/api/orders/:id/status` - Update order status
+
+#### Create Order
+- **POST** `/api/orders`
+- **Description**: Create a new service order
+- **Auth Required**: Yes
+- **Headers**: `Authorization: Bearer <token>`
+- **Request Body**:
+```json
+{
+  "serviceId": "service123",
+  "appointmentDate": "2024-01-01T10:00:00Z",
+  "notes": "Special requirements",
+  "contactPreference": "email"
+}
+```
+- **Success Response** (201 Created):
+```json
+{
+  "success": true,
+  "data": {
+    "orderId": "order123",
+    "status": "pending",
+    "service": {
+      "id": "service123",
+      "name": "Premium Service"
+    },
+    "appointmentDate": "2024-01-01T10:00:00Z",
+    "totalAmount": 99.99
+  },
+  "message": "Order created successfully"
+}
+```
+
+#### List Orders
+- **GET** `/api/orders`
+- **Description**: Retrieve user's orders with pagination
+- **Auth Required**: Yes
+- **Headers**: `Authorization: Bearer <token>`
+- **Query Parameters**:
+  - `page` (optional): Page number (default: 1)
+  - `limit` (optional): Items per page (default: 10)
+  - `status` (optional): Filter by status
+- **Success Response** (200 OK):
+```json
+{
+  "success": true,
+  "data": {
+    "orders": [
+      {
+        "orderId": "order123",
+        "status": "pending",
+        "service": {
+          "id": "service123",
+          "name": "Premium Service"
+        },
+        "appointmentDate": "2024-01-01T10:00:00Z",
+        "totalAmount": 99.99
+      }
+    ],
+    "pagination": {
+      "total": 50,
+      "page": 1,
+      "limit": 10,
+      "pages": 5
+    }
+  },
+  "message": "Orders retrieved successfully"
+}
+```
 
 ### CRM Endpoints
-- POST `/api/crm` - Create CRM record
-- GET `/api/crm` - List CRM records
-- GET `/api/crm/:id` - Get CRM record details
-- PATCH `/api/crm/:id/status` - Update CRM status
+
+#### Create CRM Record
+- **POST** `/api/crm`
+- **Description**: Create a new CRM record
+- **Auth Required**: Yes (Staff/Admin)
+- **Headers**: `Authorization: Bearer <token>`
+- **Request Body**:
+```json
+{
+  "customerId": "user123",
+  "type": "inquiry",
+  "subject": "Service Information",
+  "description": "Customer inquired about premium services",
+  "priority": "medium"
+}
+```
+- **Success Response** (201 Created):
+```json
+{
+  "success": true,
+  "data": {
+    "recordId": "crm123",
+    "customer": {
+      "id": "user123",
+      "name": "John Doe"
+    },
+    "type": "inquiry",
+    "subject": "Service Information",
+    "status": "open",
+    "createdAt": "2024-01-01T00:00:00Z"
+  },
+  "message": "CRM record created successfully"
+}
+```
 
 ### Checkout Endpoints
-- POST `/api/checkout/process` - Initialize checkout
-- POST `/api/checkout/confirm/:orderId` - Confirm payment
+
+#### Initialize Checkout
+- **POST** `/api/checkout/process`
+- **Description**: Initialize payment processing for an order
+- **Auth Required**: Yes
+- **Headers**: `Authorization: Bearer <token>`
+- **Request Body**:
+```json
+{
+  "orderId": "order123",
+  "paymentMethod": "card",
+  "currency": "USD"
+}
+```
+- **Success Response** (200 OK):
+```json
+{
+  "success": true,
+  "data": {
+    "checkoutId": "chk123",
+    "paymentUrl": "https://payment-gateway.com/pay/chk123",
+    "amount": 99.99,
+    "currency": "USD",
+    "expiresAt": "2024-01-01T01:00:00Z"
+  },
+  "message": "Checkout initialized successfully"
+}
+```
 
 ## Security Measures
 - JWT authentication
