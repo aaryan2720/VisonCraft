@@ -124,19 +124,104 @@ router.post('/login', authLimiter, async (req, res) => {
 // Get current user profile
 router.get('/me', protect, async (req, res) => {
   try {
-    const user = await User.findById(req.user._id);
+    const user = await User.findById(req.user._id).select('-password');
+    if (!user) {
+      return res.status(404).json({
+        status: 'error',
+        message: 'User not found'
+      });
+    }
     res.status(200).json({
       status: 'success',
       data: {
-        user
+        user: {
+          id: user._id,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          role: user.role,
+          phone: user.phone,
+          address: user.address,
+          languagePreference: user.languagePreference,
+          createdAt: user.createdAt,
+          updatedAt: user.updatedAt
+        }
       }
     });
   } catch (error) {
-    res.status(400).json({
+    res.status(500).json({
       status: 'error',
-      message: error.message
+      message: 'Error retrieving user profile'
     });
   }
+});
+
+// User logout
+router.post('/logout', protect, (req, res) => {
+  res.status(200).json({
+    status: 'success',
+    message: 'Logged out successfully'
+  });
+});
+
+// Admin login
+router.post('/admin/login', authLimiter, async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'Please provide email and password'
+      });
+    }
+
+    const user = await User.findOne({ email, role: 'admin' }).select('+password');
+    if (!user || !(await user.comparePassword(password))) {
+      return res.status(401).json({
+        status: 'error',
+        message: 'Invalid admin credentials'
+      });
+    }
+
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: process.env.JWT_EXPIRES_IN
+    });
+
+    res.status(200).json({
+      status: 'success',
+      token,
+      data: {
+        user: {
+          id: user._id,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          role: user.role
+        }
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 'error',
+      message: 'Error during admin login'
+    });
+  }
+});
+
+// Admin logout
+router.post('/admin/logout', protect, async (req, res) => {
+  if (req.user.role !== 'admin') {
+    return res.status(403).json({
+      status: 'error',
+      message: 'Access denied. Admin only.'
+    });
+  }
+  
+  res.status(200).json({
+    status: 'success',
+    message: 'Admin logged out successfully'
+  });
 });
 
 module.exports = { router, protect };
