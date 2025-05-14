@@ -15,21 +15,62 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     minlength: 8,
-    select: false
+    select: false,
+    validate: {
+      validator: function(value) {
+        return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/.test(value);
+      },
+      message: 'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'
+    }
   },
   firstName: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
+    minlength: [2, 'First name must be at least 2 characters long'],
+    maxlength: [50, 'First name cannot exceed 50 characters']
   },
   lastName: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
+    minlength: [2, 'Last name must be at least 2 characters long'],
+    maxlength: [50, 'Last name cannot exceed 50 characters']
   },
   phone: {
     type: String,
-    trim: true
+    required: true,
+    trim: true,
+    validate: {
+      validator: function(value) {
+        return /^(\+91|0)?[6789]\d{9}$/.test(value);
+      },
+      message: 'Please provide a valid Indian phone number'
+    }
+  },
+  dateOfBirth: {
+    type: Date,
+    required: true,
+    validate: {
+      validator: function(value) {
+        const today = new Date();
+        const age = today.getFullYear() - value.getFullYear();
+        return age >= 18 && age <= 120;
+      },
+      message: 'User must be at least 18 years old'
+    }
+  },
+  dateOfBirth: {
+    type: Date,
+    required: true,
+    validate: {
+      validator: function(v) {
+        const today = new Date();
+        const age = today.getFullYear() - v.getFullYear();
+        return age >= 18;
+      },
+      message: props => 'User must be at least 18 years old!'
+    }
   },
   address: {
     street: String,

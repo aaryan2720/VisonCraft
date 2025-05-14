@@ -1,39 +1,56 @@
-# API Routes Documentation
+# VisionCraft API Routes Documentation
 
-## Implementation Timeline
+## Authentication Routes
 
-### Day 1
-- Service and Category model APIs
-- Order management APIs
-- CRM system base APIs
+### User Authentication
 
-### Day 2
-- All Authentication APIs
-- Role-based access control endpoints
+#### POST /api/auth/register
+- **Access**: Public
+- **Description**: Register a new user
+- **Request Body**:
+  ```json
+  {
+    "email": "user@example.com",
+    "password": "securepassword",
+    "firstName": "John",
+    "lastName": "Doe",
+    "phone": "+1234567890"
+  }
+  ```
+- **Response**: User data and authentication token
 
-### Day 3
-- Service management APIs with validation
-- Service search and filtering endpoints
+#### POST /api/auth/login
+- **Access**: Public
+- **Rate Limit**: 5 attempts/15 minutes
+- **Description**: Authenticate existing user
+- **Request Body**:
+  ```json
+  {
+    "email": "user@example.com",
+    "password": "securepassword"
+  }
+  ```
+- **Response**: Authentication token and user data
 
-### Day 4
-- Enhanced CRM APIs with stage workflow
-- Document management APIs
-- Stage transition and audit APIs
+#### GET /api/auth/me
+- **Access**: Protected (requires authentication)
+- **Description**: Get current user's profile
+- **Response**: User profile information
 
-### Day 5
-- Stripe webhook handler
-- Payment processing endpoints
-- Payment status tracking APIs
+#### POST /api/auth/logout
+- **Access**: Protected (requires authentication)
+- **Description**: Logout current user
 
-### Day 6 (Planned)
-- Checkout process APIs
-- Order confirmation endpoints
-- Invoice generation APIs
+### Admin Authentication
 
-### Day 7 (Planned)
-- Email notification endpoints
-- System monitoring APIs
-- Rate limiting implementation
+#### POST /api/auth/admin/login
+- **Access**: Admin only
+- **Rate Limit**: 5 attempts/15 minutes
+- **Description**: Authenticate admin users
+
+#### POST /api/auth/admin/logout
+- **Access**: Admin only
+- **Description**: Logout admin user
 
 ## Quick Reference
 

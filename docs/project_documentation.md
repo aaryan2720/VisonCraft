@@ -3,101 +3,159 @@
 ## Project Overview
 VisionCraft is a service management system with features for handling services, customer relationships, orders, and authentication. The backend is built using Node.js with Express.js framework and MongoDB as the database.
 
-## Project Structure
+## API Documentation
 
-### Root Directory
-- `.env` - Environment variables configuration
-- `.env.example` - Example environment variables template
-- `package.json` - Project dependencies and scripts
-- `daily_tasks.txt` - Daily development tasks and notes
+### Authentication APIs
 
-### Source Code (`/src`)
+#### Register User
+- **Endpoint**: `POST /api/auth/register`
+- **Description**: Register a new user in the system
+- **Access**: Public
+- **Request Body**:
+  ```json
+  {
+    "email": "user@example.com",
+    "password": "securepassword",
+    "firstName": "John",
+    "lastName": "Doe",
+    "phone": "+1234567890"
+  }
+  ```
+- **Response**: Returns user data and authentication token
 
-#### Models
-Database schemas and models:
-- `User.js` - User authentication and profile management
-- `Service.js` - Service categories and individual services
-- `Order.js` - Customer orders and appointments
-- `CRM.js` - Customer relationship management records
+#### User Login
+- **Endpoint**: `POST /api/auth/login`
+- **Description**: Authenticate existing user
+- **Access**: Public
+- **Rate Limit**: 5 attempts per 15 minutes
+- **Request Body**:
+  ```json
+  {
+    "email": "user@example.com",
+    "password": "securepassword"
+  }
+  ```
+- **Response**: Returns authentication token and user data
 
-#### Routes
+#### Get User Profile
+- **Endpoint**: `GET /api/auth/me`
+- **Description**: Retrieve current user's profile
+- **Access**: Protected (requires authentication)
+- **Response**: Returns detailed user profile information
 
-##### Authentication (`auth.js`)
-- User registration
-- User login with rate limiting
-- Profile retrieval
-- JWT-based route protection middleware
+#### User Logout
+- **Endpoint**: `POST /api/auth/logout`
+- **Description**: Logout current user
+- **Access**: Protected (requires authentication)
 
-##### Services (`services.js`)
-Service and category management:
-- Category CRUD operations
-- Service CRUD operations
-- Bulk operations for services
-- Advanced filtering and search capabilities
-- Pagination support
+#### Admin Login
+- **Endpoint**: `POST /api/auth/admin/login`
+- **Description**: Authenticate admin users
+- **Access**: Admin only
+- **Rate Limit**: 5 attempts per 15 minutes
 
-##### Orders (`orders.js`)
-Order management system:
-- Order creation
-- Order status updates
-- Filtering and retrieval
-- Staff assignment
+#### Admin Logout
+- **Endpoint**: `POST /api/auth/admin/logout`
+- **Description**: Logout admin user
+- **Access**: Admin only
 
-##### CRM (`crm.js`)
-Customer relationship management:
-- Record creation and tracking
-- Status updates
-- Note management
-- Advanced filtering and search
-- Stage tracking
+## File Structure and Purpose
 
-##### Checkout (`checkout.js`)
-Payment processing:
-- Checkout initialization
-- Payment confirmation
-- Order creation integration
+### Core Files
+- `src/index.js`: Main application entry point
+- `.env`: Environment configuration file
+- `.env.example`: Example environment variables template
+- `package.json`: Project dependencies and scripts
 
-#### Middleware
-- Rate limiting for authentication and checkout
-- Request validation
-- Error handling
+### Source Code Organization
 
-#### Utils
-- Checkout service implementation
-- Helper functions
+#### Authentication System (`src/routes/auth.js`)
+- Handles user authentication and authorization
+- Implements JWT-based authentication
+- Manages user sessions and token blacklisting
+- Includes rate limiting for security
 
-## Implemented Features
+#### Middleware (`src/middleware/`)
+- `adminAuth.js`: Admin-specific authentication middleware
+- `validation.js`: Request validation middleware
+- Rate limiting and security middleware
 
-### Authentication
-- Secure user registration with password hashing
-- JWT-based authentication
-- Role-based access control (user, staff, admin)
-- Rate limiting for login attempts
+#### Models (`src/models/`)
+- `User.js`: User data model and schema
+- Includes password hashing and validation methods
 
-### Services Management
-- Category organization
-- Service CRUD operations
-- Bulk service status updates
-- Advanced filtering (price, duration, category)
-- Search functionality
-- Pagination
+#### Utilities (`src/utils/`)
+- `logger.js`: Application logging utility
+- `rateLimiter.js`: Rate limiting configuration
+- `tokenBlacklist.js`: JWT token blacklisting management
 
-### Order Management
-- Order creation with service selection
-- Status tracking
-- Staff assignment
-- Date scheduling
-- Customer access control
+## Implementation Changes
 
-### CRM System
-- Customer interaction tracking
-- Status and stage management
-- Note taking functionality
-- Service relation
-- Staff assignment
+### Security Enhancements
+1. Implemented Redis-based token blacklisting
+2. Added rate limiting for authentication endpoints
+3. Enhanced admin authentication middleware
+4. Implemented secure password hashing
 
-### Checkout Process
-- Secure payment processing
+### Route Modifications
+1. Added admin-specific routes with proper authorization
+2. Enhanced user profile endpoint with additional fields
+3. Implemented proper error handling and validation
+4. Added rate limiting to sensitive endpoints
+
+### Redis Integration
+1. Implemented Redis for token blacklisting
+2. Added Redis-based rate limiting
+3. Enhanced connection retry strategy
+4. Implemented proper error handling for Redis operations
+
+## Development Requirements
+
+### Environment Setup
+1. Node.js (v14 or higher)
+2. Redis server
+3. MongoDB database
+
+### Required Environment Variables
+```env
+PORT=3000
+MONGO_URI=mongodb://localhost:27017/visioncraft
+JWT_SECRET=your_jwt_secret
+JWT_EXPIRES_IN=24h
+REDIS_HOST=localhost
+REDIS_PORT=6379
+REDIS_PASSWORD=your_redis_password
+```
+
+### Installation Steps
+1. Clone the repository
+2. Install dependencies: `npm install`
+3. Set up environment variables
+4. Start Redis server
+5. Start the application: `npm start`
+
+### Testing
+- Run tests: `npm test`
+- Test coverage: `npm run test:coverage`
+
+## API Security Considerations
+1. All sensitive routes are protected with JWT authentication
+2. Rate limiting is implemented for security-critical endpoints
+3. Token blacklisting prevents unauthorized token reuse
+4. Admin routes have additional security layers
+5. Password hashing is implemented for user security
+
+## Error Handling
+- Consistent error response format
+- Proper validation error messages
+- Rate limit error responses
+- Authentication failure handling
+
+## Monitoring and Logging
+- Application logs stored in `/logs` directory
+- Error tracking and monitoring
+- Rate limit monitoring
+- Redis connection status logging
 - Order integration
 - CRM record creation
 

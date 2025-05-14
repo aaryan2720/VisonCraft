@@ -3,6 +3,60 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const router = express.Router();
 const { authLimiter } = require('../middleware');
+const { userValidationRules, handleValidationErrors } = require('../middleware/validation');
+const Redis = require('ioredis');
+const logger = require('../utils/logger');
+
+// Redis connection configuration with retry strategy
+const redisConfig = {
+  host: process.env.REDIS_HOST || 'localhost',
+  port: process.env.REDIS_PORT || 6379,
+  retryStrategy: function(times) {
+    const delay = Math.min(times * 50, 2000);
+    return delay;
+  },
+  maxRetriesPerRequest: 3
+};
+
+// Initialize Redis for token blacklisting
+const redis = new Redis(redisConfig);
+
+// Redis error handling
+redis.on('error', (error) => {
+  logger.error('Redis connection error:', error);
+});
+
+redis.on('connect', () => {
+  logger.info('Successfully connected to Redis');
+});
+
+redis.on('close', () => {
+  logger.warn('Redis connection closed');
+});
+
+process.on('SIGTERM', () => {
+  redis.disconnect();
+  process.exit(0);
+});
+
+// Middleware to check if token is blacklisted
+const checkBlacklist = async (req, res, next) => {
+  try {
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) return next();
+    
+    const isBlacklisted = await redis.get(`bl_${token}`);
+    if (isBlacklisted) {
+      return res.status(401).json({
+        status: 'error',
+        message: 'Token has been invalidated'
+      });
+    }
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
 
 // Middleware to protect routes
 const protect = async (req, res, next) => {
@@ -31,7 +85,7 @@ const protect = async (req, res, next) => {
 };
 
 // Register new user
-router.post('/register', async (req, res) => {
+router.post('/register', userValidationRules.register, handleValidationErrors, async (req, res) => {
   try {
     const { email, password, firstName, lastName, phone } = req.body;
 
@@ -51,9 +105,14 @@ router.post('/register', async (req, res) => {
       phone
     });
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: process.env.JWT_EXPIRES_IN
-    });
+    const token = jwt.sign(
+      { 
+        id: user._id,
+        role: user.role
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: process.env.JWT_EXPIRES_IN }
+    );
 
     res.status(201).json({
       status: 'success',
@@ -77,7 +136,7 @@ router.post('/register', async (req, res) => {
 });
 
 // Login user
-router.post('/login', authLimiter, async (req, res) => {
+router.post('/login', authLimiter, userValidationRules.login, handleValidationErrors, async (req, res) => {
   try {
     const { email, password } = req.body;
 

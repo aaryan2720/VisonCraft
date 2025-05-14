@@ -2,10 +2,12 @@ const express = require('express');
 const router = express.Router();
 const { checkoutLimiter } = require('../middleware');
 const { protect } = require('./auth');
+const { checkoutValidationRules, validateCheckout } = require('../middleware/checkoutValidation');
 const CheckoutService = require('../utils/checkout');
+const Order = require('../models/Order');
 
 // Initialize checkout process
-router.post('/process', checkoutLimiter, protect, async (req, res) => {
+router.post('/process', checkoutLimiter, protect, validateCheckout(checkoutValidationRules.process), async (req, res) => {
   try {
     const { services, paymentMethod, billingAddress, scheduledDate } = req.body;
 
