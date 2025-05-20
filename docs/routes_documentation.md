@@ -10,14 +10,26 @@
 - **Request Body**:
   ```json
   {
-    "email": "user@example.com",
+    "identifier": "user@example.com or +1234567890",
     "password": "securepassword",
     "firstName": "John",
     "lastName": "Doe",
-    "phone": "+1234567890"
+    "postalCode": "431001"
   }
   ```
-- **Response**: User data and authentication token
+- **Response**: User data, location info (city, state) and OTP sent status
+
+#### POST /api/auth/verify-otp
+- **Access**: Public
+- **Description**: Verify OTP for registration or login
+- **Request Body**:
+  ```json
+  {
+    "identifier": "user@example.com or +1234567890",
+    "otp": "123456"
+  }
+  ```
+- **Response**: Authentication token and user data
 
 #### POST /api/auth/login
 - **Access**: Public
@@ -26,11 +38,11 @@
 - **Request Body**:
   ```json
   {
-    "email": "user@example.com",
+    "identifier": "user@example.com or +1234567890",
     "password": "securepassword"
   }
   ```
-- **Response**: Authentication token and user data
+- **Response**: OTP sent status
 
 #### GET /api/auth/me
 - **Access**: Protected (requires authentication)
@@ -55,8 +67,9 @@
 ## Quick Reference
 
 ### Authentication
-- POST `/api/auth/register` - Register new user
-- POST `/api/auth/login` - User login
+- POST `/api/auth/register` - Register new user with unified login
+- POST `/api/auth/verify-otp` - Verify OTP for authentication
+- POST `/api/auth/login` - Unified login with email/phone
 - POST `/api/auth/admin/login` - Admin login
 - GET `/api/auth/me` - Get user profile
 - POST `/api/auth/logout` - User logout

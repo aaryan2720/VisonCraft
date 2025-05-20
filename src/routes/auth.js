@@ -84,25 +84,31 @@ const protect = async (req, res, next) => {
   }
 };
 
+const otpService = require('../services/otpService');
+const postalCodeService = require('../services/postalCodeService');
+
 // Register new user
 router.post('/register', userValidationRules.register, handleValidationErrors, async (req, res) => {
   try {
-    const { email, password, firstName, lastName, phone } = req.body;
+    const { identifier, password, firstName, lastName, postalCode } = req.body;
+    const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identifier);
 
-    const userExists = await User.findOne({ email });
-    if (userExists) {
-      return res.status(400).json({
-        status: 'error',
-        message: 'User already exists'
-      });
-    }
+    // Get location info from postal code
+    const locationInfo = await postalCodeService.getLocationInfo(postalCode);
+
+    // Generate OTP
+    const otp = await otpService.generateOTP(identifier);
 
     const user = await User.create({
-      email,
+      [isEmail ? 'email' : 'phone']: identifier,
       password,
       firstName,
       lastName,
-      phone
+      city: locationInfo.city,
+      state: locationInfo.state,
+      country: locationInfo.country,
+      postalCode,
+      phone: !isEmail ? identifier : undefined
     });
 
     const token = jwt.sign(
@@ -135,19 +141,57 @@ router.post('/register', userValidationRules.register, handleValidationErrors, a
   }
 });
 
-// Login user
-router.post('/login', authLimiter, userValidationRules.login, handleValidationErrors, async (req, res) => {
+// Verify OTP
+router.post('/verify-otp', async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { identifier, otp } = req.body;
 
-    if (!email || !password) {
+    const isValid = await otpService.verifyOTP(identifier, otp);
+    if (!isValid) {
       return res.status(400).json({
         status: 'error',
-        message: 'Please provide email and password'
+        message: 'Invalid or expired OTP'
       });
     }
 
-    const user = await User.findOne({ email }).select('+password');
+    const user = await User.findOne({
+      $or: [
+        { email: identifier },
+        { phone: identifier }
+      ]
+    });
+
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: process.env.JWT_EXPIRE
+    });
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        user,
+        token
+      }
+    });
+  } catch (error) {
+    logger.error('OTP verification error:', error);
+    res.status(500).json({
+      status: 'error',
+      message: 'Error verifying OTP'
+    });
+  }
+});
+
+// Login user
+router.post('/login', authLimiter, async (req, res) => {
+  try {
+    const { identifier, password } = req.body;
+
+    const user = await User.findOne({
+      $or: [
+        { email: identifier },
+        { phone: identifier }
+      ]
+    }).select('+password');
     if (!user || !(await user.comparePassword(password))) {
       return res.status(401).json({
         status: 'error',
@@ -216,11 +260,22 @@ router.get('/me', protect, async (req, res) => {
 });
 
 // User logout
-router.post('/logout', protect, (req, res) => {
-  res.status(200).json({
-    status: 'success',
-    message: 'Logged out successfully'
-  });
+router.post('/logout', protect, async (req, res) => {
+  try {
+    const token = req.headers.authorization.split(' ')[1];
+    await redis.set(`bl_${token}`, 'true', 'EX', process.env.JWT_EXPIRES_IN);
+    
+    res.status(200).json({
+      status: 'success',
+      message: 'Logged out successfully'
+    });
+  } catch (error) {
+    logger.error('Logout error:', error);
+    res.status(500).json({
+      status: 'error',
+      message: 'Error during logout'
+    });
+  }
 });
 
 // Admin login
@@ -270,17 +325,28 @@ router.post('/admin/login', authLimiter, async (req, res) => {
 
 // Admin logout
 router.post('/admin/logout', protect, async (req, res) => {
-  if (req.user.role !== 'admin') {
-    return res.status(403).json({
+  try {
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({
+        status: 'error',
+        message: 'Access denied. Admin only.'
+      });
+    }
+
+    const token = req.headers.authorization.split(' ')[1];
+    await redis.set(`bl_${token}`, 'true', 'EX', process.env.JWT_EXPIRES_IN);
+    
+    res.status(200).json({
+      status: 'success',
+      message: 'Admin logged out successfully'
+    });
+  } catch (error) {
+    logger.error('Admin logout error:', error);
+    res.status(500).json({
       status: 'error',
-      message: 'Access denied. Admin only.'
+      message: 'Error during admin logout'
     });
   }
-  
-  res.status(200).json({
-    status: 'success',
-    message: 'Admin logged out successfully'
-  });
 });
 
 module.exports = { router, protect };

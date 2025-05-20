@@ -26,16 +26,22 @@ const handleValidationErrors = (req, res, next) => {
 };
 
 const registerValidationRules = [
-  body('email')
+  body('identifier')
     .trim()
-    .isEmail()
-    .withMessage('Please enter a valid email address')
-    .normalizeEmail()
     .custom(async (value) => {
       const User = require('../models/User');
-      const existingUser = await User.findOne({ email: value.toLowerCase() });
+      const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+      const isPhone = /^\+[1-9]\d{1,14}$/.test(value);
+
+      if (!isEmail && !isPhone) {
+        throw new Error('Please enter a valid email address or phone number');
+      }
+
+      const query = isEmail ? { email: value.toLowerCase() } : { phone: value };
+      const existingUser = await User.findOne(query);
+
       if (existingUser) {
-        throw new Error('This email is already registered. Please use a different email or try logging in');
+        throw new Error('This identifier is already registered. Please use a different one or try logging in');
       }
       return true;
     }),
@@ -92,6 +98,20 @@ const registerValidationRules = [
       }
       if (dob > today) {
         throw new Error('Date of birth cannot be in the future');
+      }
+      return true;
+    })
+];
+
+const postalCodeValidationRules = [
+  body('postalCode')
+    .trim()
+    .notEmpty()
+    .withMessage('Postal code is required')
+    .custom(async (value) => {
+      const postalCodeService = require('../services/postalCodeService');
+      if (!postalCodeService.validatePostalCode(value)) {
+        throw new Error('Please enter a valid postal code');
       }
       return true;
     })

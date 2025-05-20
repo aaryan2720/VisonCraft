@@ -55,21 +55,15 @@ const userSchema = new mongoose.Schema({
       validator: function(value) {
         const today = new Date();
         const age = today.getFullYear() - value.getFullYear();
-        return age >= 18 && age <= 120;
+        const monthDiff = today.getMonth() - value.getMonth();
+        
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < value.getDate())) {
+          age--;
+        }
+        
+        return age >= 18 && age <= 120 && value <= today;
       },
-      message: 'User must be at least 18 years old'
-    }
-  },
-  dateOfBirth: {
-    type: Date,
-    required: true,
-    validate: {
-      validator: function(v) {
-        const today = new Date();
-        const age = today.getFullYear() - v.getFullYear();
-        return age >= 18;
-      },
-      message: props => 'User must be at least 18 years old!'
+      message: 'User must be at least 18 years old and date must be valid'
     }
   },
   address: {
