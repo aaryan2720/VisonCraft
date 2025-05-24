@@ -24,6 +24,13 @@ const categorySchema = new mongoose.Schema({
 });
 
 const serviceSchema = new mongoose.Schema({
+  code: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true,
+    lowercase: true
+  },
   name: {
     type: String,
     required: true,
@@ -70,10 +77,17 @@ const serviceSchema = new mongoose.Schema({
 });
 
 // Create indexes for frequently queried fields
+serviceSchema.index({ code: 1 });
+serviceSchema.index({ name: 1 });
+serviceSchema.index({ category: 1 });
+serviceSchema.index({ active: 1 });
 serviceSchema.index({ category: 1, active: 1 });
 serviceSchema.index({ name: 'text', description: 'text' });
 
 const Category = mongoose.model('Category', categorySchema);
 const Service = mongoose.model('Service', serviceSchema);
 
-module.exports = { Category, Service };
+module.exports = {
+  Service,
+  Category
+};

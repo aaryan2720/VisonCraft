@@ -3,6 +3,52 @@ const { Category, Service } = require('../models/Service');
 const { protect } = require('./auth');
 const router = express.Router();
 
+// Initialize default services
+async function initializeDefaultServices() {
+  try {
+    // Check if PAN service exists
+    const panService = await Service.findOne({ code: 'pan' });
+    if (!panService) {
+      // Create default category if not exists
+      let documentCategory = await Category.findOne({ name: 'Document Services' });
+      if (!documentCategory) {
+        documentCategory = await Category.create({
+          name: 'Document Services',
+          description: 'Government document related services',
+          active: true
+        });
+      }
+
+      // Create PAN service
+      await Service.create({
+        code: 'pan',
+        name: 'PAN Card Application',
+        description: 'Apply for new PAN card or corrections',
+        category: documentCategory._id,
+        price: 499,
+        duration: 30,
+        active: true,
+        features: [
+          { name: 'Online Application', included: true },
+          { name: 'Document Verification', included: true },
+          { name: 'Digital Copy', included: true }
+        ],
+        requirements: [
+          'Valid ID Proof',
+          'Address Proof',
+          'Passport Size Photo'
+        ]
+      });
+      console.log('Default PAN service created');
+    }
+  } catch (error) {
+    console.error('Error initializing default services:', error);
+  }
+}
+
+// Call initialization on startup
+initializeDefaultServices();
+
 // Admin middleware
 const isAdmin = (req, res, next) => {
   if (req.user.role !== 'admin') {

@@ -26,6 +26,7 @@ app.use('/api/orders', require('./routes/orders'));
 app.use('/api/documents', require('./routes/documents'));
 app.use('/api/crm', require('./routes/crm'));
 app.use('/api/checkout', require('./routes/checkout'));
+app.use('/api/applications', require('./routes/applications'));
 
 // MongoDB connection configuration
 const MAX_RETRY_ATTEMPTS = 5;
