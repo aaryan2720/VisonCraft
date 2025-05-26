@@ -23,7 +23,12 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 // Mount routers
+const applicationsRouter = require('./routes/applications');
+const servicesRouter = require('./routes/services');
+
 app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/applications', applicationsRouter);
+app.use('/api/v1/services', servicesRouter);
 
 // Handle undefined routes
 // app.all('*', (req, res, next) => {

@@ -37,13 +37,69 @@ const ApplyNowPage = () => {
     const fetchServiceDetails = () => {
       const allServices = [
         {
-          id: 'pan',
+          id: 'pancard',
           name: 'PAN Card',
           logo: '💳',
-          fees: '₹499',
+          fees: '₹500',
           timeRequired: '15-20 days',
-          description: 'Get your PAN Card with hassle-free processing'
+          description: 'Apply for a new PAN card or make corrections to your existing PAN card details.'
         },
+        {
+          id: 'aadharcard',
+          name: 'Aadhar Card',
+          logo: '🪪',
+          fees: '₹200',
+          timeRequired: '7-10 days',
+          description: 'Update your Aadhar card details or apply for a new Aadhar card.'
+        },
+        {
+          id: 'voterid',
+          name: 'Voter ID',
+          logo: '🗳️',
+          fees: '₹300',
+          timeRequired: '20-25 days',
+          description: 'Register for a new Voter ID card or update your existing voter information.'
+        },
+        {
+          id: 'passport',
+          name: 'Passport',
+          logo: '🛂',
+          fees: '₹1500',
+          timeRequired: '30-45 days',
+          description: 'Apply for a new passport, renew your existing passport or apply for passport services.'
+        },
+        {
+          id: 'drivinglicense',
+          name: 'Driving License',
+          logo: '🚗',
+          fees: '₹800',
+          timeRequired: '15-20 days',
+          description: 'Apply for a new driving license or renew your existing driving license.'
+        },
+        {
+          id: 'incometax',
+          name: 'Income Tax Return',
+          logo: '💰',
+          fees: '₹1000',
+          timeRequired: '3-5 days',
+          description: 'File your income tax returns with expert assistance and guidance.'
+        },
+        {
+          id: 'birthcertificate',
+          name: 'Birth Certificate',
+          logo: '👶',
+          fees: '₹400',
+          timeRequired: '10-15 days',
+          description: 'Apply for a birth certificate or get a duplicate copy of your birth certificate.'
+        },
+        {
+          id: 'propertyregistration',
+          name: 'Property Registration',
+          logo: '🏠',
+          fees: '₹2500',
+          timeRequired: '25-30 days',
+          description: 'Register your property documents and complete all legal formalities.'
+        }
       ];
       
       const service = allServices.find(s => s.id === serviceId);

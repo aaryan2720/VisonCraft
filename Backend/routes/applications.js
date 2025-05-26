@@ -3,7 +3,7 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const Application = require('../models/Application');
 const { Service } = require('../models/Service');
-const { protect } = require('./auth');
+const { protect } = require('../middlewares/authMiddleware');
 const { uploadToCloudinary } = require('../config/cloudinary');
 const multer = require('multer');
 

@@ -1,13 +1,13 @@
 const express = require('express');
 const { Category, Service } = require('../models/Service');
-const { protect } = require('./auth');
+const { protect } = require('../middlewares/authMiddleware');
 const router = express.Router();
 
 // Initialize default services
 async function initializeDefaultServices() {
   try {
     // Check if PAN service exists
-    const panService = await Service.findOne({ code: 'pan' });
+    const panService = await Service.findOne({ code: 'pancard' });
     if (!panService) {
       // Create default category if not exists
       let documentCategory = await Category.findOne({ name: 'Document Services' });
@@ -21,7 +21,7 @@ async function initializeDefaultServices() {
 
       // Create PAN service
       await Service.create({
-        code: 'pan',
+        code: 'pancard',
         name: 'PAN Card Application',
         description: 'Apply for new PAN card or corrections',
         category: documentCategory._id,
