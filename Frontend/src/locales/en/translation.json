@@ -1,0 +1,70 @@
+{
+  "navbar": {
+    "search": "Search...",
+    "login": "Login",
+    "signup": "Sign Up",
+    "language": "Language"
+  },
+  "services": {
+    "title": "Our Services",
+    "subtitle": "Choose from our wide range of document services",
+    "applyNow": "Apply Now",
+    "fees": "Fees",
+    "timeRequired": "Time Required",
+    "filters": {
+      "all": "All Services",
+      "identity": "Identity Documents",
+      "financial": "Financial Services",
+      "education": "Education Documents",
+      "property": "Property Documents"
+    },
+    "serviceNames": {
+      "panCard": "PAN Card",
+      "aadharCard": "Aadhar Card",
+      "voterID": "Voter ID",
+      "passport": "Passport",
+      "drivingLicense": "Driving License",
+      "incomeTax": "Income Tax",
+      "birthCertificate": "Birth Certificate",
+      "propertyRegistration": "Property Registration"
+    }
+  },
+  "testimonials": {
+    "heading": "What Our Customers Say",
+    "daysAgo": "days ago",
+    "service": "Service",
+    "feedback": {
+      "user1": "The service was excellent! I got my PAN card within the promised time. Highly recommended.",
+      "user2": "Very professional service. The team guided me through the entire process.",
+      "user3": "Quick and efficient service. Will definitely use again for other documents."
+    }
+  },
+  "footer": {
+    "about": "ABOUT",
+    "groupCompanies": "GROUP COMPANIES",
+    "help": "HELP",
+    "consumerPolicy": "CONSUMER POLICY",
+    "newsletter": "Subscribe to our Newsletter",
+    "newsletterSubtext": "Stay updated with our latest news and offers",
+    "subscribe": "Subscribe",
+    "connectWithUs": "Connect With Us",
+    "copyright": "All Rights Reserved.",
+    "securePayments": "Secure Payments"
+  },
+  "auth": {
+    "createAccount": "Create Account",
+    "joinText": "Join DocNish to access all our services",
+    "fullName": "Full Name",
+    "emailPhone": "Email / Phone Number",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "forgotPassword": "Forgot Password?",
+    "signupButton": "Sign Up",
+    "loginButton": "Log In",
+    "orContinueWith": "or continue with",
+    "alreadyHaveAccount": "Already have an account?",
+    "dontHaveAccount": "Don't have an account?",
+    "welcomeBack": "Welcome Back",
+    "loginText": "Log in to access DocNish services"
+  }
+}

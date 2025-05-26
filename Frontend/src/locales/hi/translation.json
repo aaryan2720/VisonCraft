@@ -1,0 +1,48 @@
+{
+  "navbar": {
+    "search": "खोजें...",
+    "login": "लॉग इन",
+    "signup": "साइन अप",
+    "language": "भाषा"
+  },
+  "services": {
+    "title": "हमारी सेवाएं",
+    "subtitle": "हमारी विस्तृत दस्तावेज़ सेवाओं में से चुनें",
+    "applyNow": "अभी आवेदन करें",
+    "fees": "शुल्क",
+    "timeRequired": "आवश्यक समय"
+  },
+  "testimonials": {
+    "heading": "हमारे ग्राहक क्या कहते हैं",
+    "daysAgo": "दिन पहले",
+    "service": "सेवा"
+  },
+  "footer": {
+    "about": "हमारे बारे में",
+    "groupCompanies": "समूह कंपनियां",
+    "help": "सहायता",
+    "consumerPolicy": "उपभोक्ता नीति",
+    "newsletter": "हमारे न्यूज़लेटर की सदस्यता लें",
+    "newsletterSubtext": "हमारे नवीनतम समाचार और ऑफ़र से अपडेट रहें",
+    "subscribe": "सदस्यता लें",
+    "connectWithUs": "हमसे जुड़ें",
+    "copyright": "सर्वाधिकार सुरक्षित।",
+    "securePayments": "सुरक्षित भुगतान"
+  },
+  "auth": {
+    "createAccount": "खाता बनाएं",
+    "joinText": "सभी सेवाओं का उपयोग करने के लिए DocNish से जुड़ें",
+    "fullName": "पूरा नाम",
+    "emailPhone": "ईमेल / फोन नंबर",
+    "password": "पासवर्ड",
+    "confirmPassword": "पासवर्ड की पुष्टि करें",
+    "forgotPassword": "पासवर्ड भूल गए?",
+    "signupButton": "साइन अप करें",
+    "loginButton": "लॉग इन करें",
+    "orContinueWith": "या इसके साथ जारी रखें",
+    "alreadyHaveAccount": "पहले से ही एक खाता है?",
+    "dontHaveAccount": "खाता नहीं है?",
+    "welcomeBack": "वापसी पर स्वागत है",
+    "loginText": "DocNish सेवाओं का उपयोग करने के लिए लॉग इन करें"
+  }
+}

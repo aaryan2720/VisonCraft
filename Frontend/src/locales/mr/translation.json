@@ -1,0 +1,70 @@
+{
+  "navbar": {
+    "search": "शोधा...",
+    "login": "लॉगिन",
+    "signup": "साइन अप",
+    "language": "भाषा"
+  },
+  "services": {
+    "title": "आमच्या सेवा",
+    "subtitle": "आमच्या विविध दस्तऐवज सेवांमधून निवडा",
+    "applyNow": "आता अर्ज करा",
+    "fees": "शुल्क",
+    "timeRequired": "आवश्यक वेळ",
+    "filters": {
+      "all": "सर्व सेवा",
+      "identity": "ओळख दस्तऐवज",
+      "financial": "आर्थिक दस्तऐवज",
+      "education": "शैक्षणिक दस्तऐवज",
+      "property": "मालमत्ता दस्तऐवज"
+    },
+    "serviceNames": {
+      "panCard": "पॅन कार्ड",
+      "aadharCard": "आधार कार्ड",
+      "voterID": "मतदार ओळखपत्र",
+      "passport": "पासपोर्ट",
+      "drivingLicense": "वाहन चालविण्याचा परवाना",
+      "incomeTax": "आयकर रिटर्न",
+      "birthCertificate": "जन्म प्रमाणपत्र",
+      "propertyRegistration": "मालमत्ता नोंदणी"
+    }
+  },
+  "testimonials": {
+    "heading": "आमचे ग्राहक काय म्हणतात",
+    "daysAgo": "दिवसांपूर्वी",
+    "service": "सेवा",
+    "feedback": {
+      "user1": "सेवा उत्कृष्ट होती! मला वचन दिलेल्या वेळेत पॅन कार्ड मिळाले. अत्यंत शिफारस केली.",
+      "user2": "अत्यंत व्यावसायिक सेवा. टीमने मला संपूर्ण प्रक्रियेत मार्गदर्शन केले.",
+      "user3": "जलद आणि कार्यक्षम सेवा. इतर दस्तऐवजांसाठी निश्चितच पुन्हा वापरेल."
+    }
+  },
+  "footer": {
+    "about": "आमच्याबद्दल",
+    "groupCompanies": "समूह कंपन्या",
+    "help": "मदत",
+    "consumerPolicy": "ग्राहक धोरण",
+    "newsletter": "आमच्या न्यूजलेटरची सदस्यता घ्या",
+    "newsletterSubtext": "आमच्या नवीनतम बातम्या आणि ऑफरसह अद्ययावत रहा",
+    "subscribe": "सदस्यता घ्या",
+    "connectWithUs": "आमच्याशी जोडा",
+    "copyright": "सर्व हक्क राखीव.",
+    "securePayments": "सुरक्षित पेमेंट्स"
+  },
+  "auth": {
+    "createAccount": "खाते तयार करा",
+    "joinText": "सर्व सेवांचा वापर करण्यासाठी DocNish मध्ये सामील व्हा",
+    "fullName": "पूर्ण नाव",
+    "emailPhone": "ईमेल / फोन नंबर",
+    "password": "पासवर्ड",
+    "confirmPassword": "पासवर्डची पुष्टी करा",
+    "forgotPassword": "पासवर्ड विसरलात?",
+    "signupButton": "साइन अप करा",
+    "loginButton": "लॉगिन करा",
+    "orContinueWith": "किंवा यासह सुरू ठेवा",
+    "alreadyHaveAccount": "आधीपासूनच खाते आहे?",
+    "dontHaveAccount": "खाते नाही?",
+    "welcomeBack": "पुन्हा स्वागत आहे",
+    "loginText": "DocNish सेवा वापरण्यासाठी लॉगिन करा"
+  }
+}
