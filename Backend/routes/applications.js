@@ -160,7 +160,7 @@ router.post('/', upload.array('documents', 5), async (req, res) => {
     await application.save();
     
     // Populate service details
-    await application.populate('service');
+    await application.populate('service', 'name code price duration description');
 
     res.status(201).json({
       success: true,
@@ -203,7 +203,8 @@ router.post('/', upload.array('documents', 5), async (req, res) => {
 // Get application by ID
 router.get('/:id', protect, async (req, res) => {
   try {
-    const application = await Application.findById(req.params.id).populate('service');
+    const application = await Application.findById(req.params.id)
+      .populate('service', 'name code price duration description');
     if (!application) {
       return res.status(404).json({
         success: false,

@@ -119,6 +119,16 @@ applicationSchema.pre('save', function(next) {
   next();
 });
 
+// Add schema options for virtuals
+applicationSchema.set('toJSON', { virtuals: true });
+applicationSchema.set('toObject', { virtuals: true });
+
+// Middleware to populate service details
+applicationSchema.pre(/^find/, function(next) {
+  this.populate('service', 'name code price duration description');
+  next();
+});
+
 // Create indexes for frequently queried fields
 applicationSchema.index({ 'customer.phoneNumber': 1 });
 applicationSchema.index({ 'customer.email': 1 });

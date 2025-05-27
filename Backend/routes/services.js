@@ -6,40 +6,135 @@ const router = express.Router();
 // Initialize default services
 async function initializeDefaultServices() {
   try {
-    // Check if PAN service exists
-    const panService = await Service.findOne({ code: 'pancard' });
-    if (!panService) {
-      // Create default category if not exists
-      let documentCategory = await Category.findOne({ name: 'Document Services' });
-      if (!documentCategory) {
-        documentCategory = await Category.create({
-          name: 'Document Services',
-          description: 'Government document related services',
-          active: true
-        });
-      }
+    // Create default category if not exists
+    let documentCategory = await Category.findOne({ name: 'Document Services' });
+    if (!documentCategory) {
+      documentCategory = await Category.create({
+        name: 'Document Services',
+        description: 'Government document related services',
+        active: true
+      });
+    }
 
-      // Create PAN service
-      await Service.create({
+    // Default services configuration
+    const defaultServices = [
+      {
         code: 'pancard',
         name: 'PAN Card Application',
-        description: 'Apply for new PAN card or corrections',
-        category: documentCategory._id,
-        price: 499,
-        duration: 30,
-        active: true,
+        description: 'Apply for a new PAN card or make corrections to your existing PAN card details.',
+        price: 500,
+        duration: 20,
         features: [
           { name: 'Online Application', included: true },
           { name: 'Document Verification', included: true },
           { name: 'Digital Copy', included: true }
         ],
-        requirements: [
-          'Valid ID Proof',
-          'Address Proof',
-          'Passport Size Photo'
-        ]
-      });
-      console.log('Default PAN service created');
+        requirements: ['Valid ID Proof', 'Address Proof', 'Passport Size Photo']
+      },
+      {
+        code: 'aadharcard',
+        name: 'Aadhar Card',
+        description: 'Update your Aadhar card details or apply for a new Aadhar card.',
+        price: 200,
+        duration: 10,
+        features: [
+          { name: 'Online Application', included: true },
+          { name: 'Biometric Verification', included: true },
+          { name: 'Digital Copy', included: true }
+        ],
+        requirements: ['Valid ID Proof', 'Address Proof', 'Biometric Data']
+      },
+      {
+        code: 'voterid',
+        name: 'Voter ID',
+        description: 'Register for a new Voter ID card or update your existing voter information.',
+        price: 300,
+        duration: 25,
+        features: [
+          { name: 'Online Registration', included: true },
+          { name: 'Address Verification', included: true },
+          { name: 'Digital Copy', included: true }
+        ],
+        requirements: ['Age Proof', 'Address Proof', 'Passport Size Photo']
+      },
+      {
+        code: 'passport',
+        name: 'Passport',
+        description: 'Apply for a new passport, renew your existing passport or apply for passport services.',
+        price: 1500,
+        duration: 45,
+        features: [
+          { name: 'Online Application', included: true },
+          { name: 'Document Verification', included: true },
+          { name: 'Police Verification', included: true }
+        ],
+        requirements: ['Birth Certificate', 'Address Proof', 'ID Proof', 'Passport Size Photos']
+      },
+      {
+        code: 'drivinglicense',
+        name: 'Driving License',
+        description: 'Apply for a new driving license or renew your existing driving license.',
+        price: 800,
+        duration: 20,
+        features: [
+          { name: 'Online Application', included: true },
+          { name: 'Test Scheduling', included: true },
+          { name: 'Digital Copy', included: true }
+        ],
+        requirements: ['Age Proof', 'Address Proof', 'Medical Certificate', 'Learner\'s License']
+      },
+      {
+        code: 'incometax',
+        name: 'Income Tax Return',
+        description: 'File your income tax returns with expert assistance and guidance.',
+        price: 1000,
+        duration: 5,
+        features: [
+          { name: 'Online Filing', included: true },
+          { name: 'Expert Review', included: true },
+          { name: 'Digital Copy', included: true }
+        ],
+        requirements: ['PAN Card', 'Form 16', 'Investment Proofs', 'Bank Statements']
+      },
+      {
+        code: 'birthcertificate',
+        name: 'Birth Certificate',
+        description: 'Apply for a birth certificate or get a duplicate copy of your birth certificate.',
+        price: 400,
+        duration: 15,
+        features: [
+          { name: 'Online Application', included: true },
+          { name: 'Document Verification', included: true },
+          { name: 'Digital Copy', included: true }
+        ],
+        requirements: ['Hospital Record', 'Parents\'s ID Proof', 'Address Proof']
+      },
+      {
+        code: 'propertyregistration',
+        name: 'Property Registration',
+        description: 'Register your property documents and complete all legal formalities.',
+        price: 2500,
+        duration: 30,
+        features: [
+          { name: 'Document Review', included: true },
+          { name: 'Legal Verification', included: true },
+          { name: 'Registration Process', included: true }
+        ],
+        requirements: ['Property Documents', 'ID Proof', 'Address Proof', 'Tax Receipts']
+      }
+    ];
+
+    // Create or update each service
+    for (const serviceData of defaultServices) {
+      const existingService = await Service.findOne({ code: serviceData.code });
+      if (!existingService) {
+        await Service.create({
+          ...serviceData,
+          category: documentCategory._id,
+          active: true
+        });
+        console.log(`${serviceData.name} service created`);
+      }
     }
   } catch (error) {
     console.error('Error initializing default services:', error);
