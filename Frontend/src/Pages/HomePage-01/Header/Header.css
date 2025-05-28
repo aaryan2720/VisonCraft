@@ -131,8 +131,8 @@
 
 .login-button {
   color: #0D3E7E;
-  border: 2px solid hsl(214, 81%, 27%);
-  background: white;
+  border: 2px solid #FBB040;
+  background: white !important;
   border-radius: 999px !important;
 }
 
@@ -156,6 +156,7 @@
   background-color: #FBB040;
   color: #0D3E7E;
   border: 2px solid #FBB040;
+  font-weight: 600 !important;
 }
 
 .signup-button:hover {

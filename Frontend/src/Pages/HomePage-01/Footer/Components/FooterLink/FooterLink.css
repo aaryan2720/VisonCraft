@@ -1,0 +1,31 @@
+.footer-links li {
+    margin-bottom: 10px;
+  }
+  
+  .footer-links a {
+    color: #e0e0e0;
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    position: relative;
+    display: inline-block;
+  }
+  
+  .footer-links a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 1px;
+    bottom: -2px;
+    left: 0;
+    background-color: #FBB040;
+    transition: width 0.3s ease;
+  }
+  
+  .footer-links a:hover {
+    color: #FBB040;
+  }
+  
+  .footer-links a:hover::after {
+    width: 100%;
+  }

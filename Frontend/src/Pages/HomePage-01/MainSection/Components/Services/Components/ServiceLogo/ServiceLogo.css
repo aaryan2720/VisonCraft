@@ -1,0 +1,16 @@
+/* src/components/Services/ServiceLogo/ServiceLogo.css */
+.service-logo {
+    font-size: 3rem;
+    margin: 0 auto 15px;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f5f7fa;
+    border-radius: 50%;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.4s ease;
+    position: relative;
+    z-index: 2;
+  }

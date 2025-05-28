@@ -1,0 +1,152 @@
+/* Base Card Styles */
+.service-card {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  border: 1px solid #FBB040;
+  padding: 20px;
+  width: 280px;
+  margin: 15px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.service-logo {
+  justify-content: center;
+  align-items: center;
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 10px;
+  margin-left: 80px;
+  
+}
+
+.service-title {
+  font-size: 1.2rem;
+  margin: 5px 0;
+  text-align: center;
+  color: #0D3E7E;
+}
+
+.service-subscript {
+  font-size: 0.7rem;
+  color: #666;
+  text-align: center;
+  margin: 0 0 15px 0;
+}
+
+.service-details {
+  margin: 10px 0;
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.detail-label {
+  font-weight: bold;
+  color: #555;
+}
+
+.detail-value {
+  color: #0D3E7E;
+}
+
+.documents-button {
+  background: none;
+  border: none;
+  color: #0D3E7E;
+  font-size: 0.8rem;
+  text-decoration: underline;
+  cursor: pointer;
+  margin: 10px 0;
+  padding: 5px;
+  align-self: center;
+  transition: color 0.3s;
+}
+
+.documents-button:hover {
+  color: #FBB040;
+}
+
+.service-description {
+  color: #666;
+  font-size: 0.85rem;
+  margin: 15px 0;
+  line-height: 1.5;
+}
+
+
+
+
+
+/* Popup Styles */
+.documents-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(3px);
+}
+
+.popup-content {
+  background-color: white;
+  padding: 25px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.popup-content h3 {
+  color: #0D3E7E;
+  margin-bottom: 20px;
+  font-size: 1.3rem;
+  text-align: center;
+}
+
+.documents-list {
+  padding-left: 20px;
+}
+
+.documents-list li {
+  margin-bottom: 10px;
+  color: #444;
+  line-height: 1.5;
+}
+
+.close-popup {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #666;
+  transition: color 0.3s;
+  padding: 0 5px;
+}
+
+.close-popup:hover {
+  color: #FBB040;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .popup-content {
+      width: 95%;
+      padding: 20px 15px;
+  }
+}

@@ -1,0 +1,107 @@
+.filter-item {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 10px 20px !important; /* Reduced vertical padding */
+  border-radius: 20px;
+  transition: all 0.3s ease;
+  border: 2px solid #FBB040 !important;
+}
+
+.filter-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filter-icon {
+  width: 20px; /* Reduced icon size */
+  height: 20px; /* Reduced icon size */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.filter-name {
+  font-weight: bold;
+  font-size: 14px;
+  /* Prevent text wrapping */
+}
+
+.active {
+  background-color: #f0f0f0;
+}
+
+.filter-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    background-color: #f0f2f5;
+    border: 2px solid #e0e0e0;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    color: #000000;
+  }
+  
+  .filter-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, rgba(13, 62, 126, 0.1), rgba(251, 176, 64, 0.1));
+    z-index: -1;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.4s ease;
+    border: 0px solid #0D3E7E !important;
+
+  }
+  
+  .filter-item:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
+    border-color: #0D3E7E;
+  }
+  
+  .filter-item:hover::before {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+  
+  .filter-item.active {
+    background-color: #0D3E7E;
+    color: white !important;
+    box-shadow: 0 6px 15px rgba(13, 62, 126, 0.4);
+    border-color: #0D3E7E;
+    transform: translateY(-3px);
+    animation: pulse 1.5s infinite;
+  }
+  
+  .filter-icon {
+    font-size: 1.5rem;
+    margin-right: 10px;
+    transition: transform 0.3s ease;
+  }
+  
+  .filter-item:hover .filter-icon {
+    transform: scale(1.2);
+  }
+  
+  @keyframes pulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(13, 62, 126, 0.7);
+    }
+    70% {
+      box-shadow: 0 0 0 10px rgba(13, 62, 126, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(13, 62, 126, 0);
+    }
+  }

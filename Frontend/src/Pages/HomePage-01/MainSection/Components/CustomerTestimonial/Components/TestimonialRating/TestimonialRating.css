@@ -1,0 +1,14 @@
+/* src/components/CustomerTestimonial/TestimonialRating/TestimonialRating.css */
+.testimonial-rating {
+    display: flex;
+    gap: 2px; /* Small gap between stars */
+  }
+  
+  .star {
+    color: #d4d4d4;
+    font-size: 1.2rem;
+  }
+  
+  .star.filled {
+    color: #FBB040;
+  }

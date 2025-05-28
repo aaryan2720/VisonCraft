@@ -17,10 +17,12 @@ const LoginPage = () => {
   
   const [inputType, setInputType] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
   const [errors, setErrors] = useState({});
   const [isFormValid, setIsFormValid] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
+  const [hasSubmitted, setHasSubmitted] = useState(false);
   
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -97,6 +99,7 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitError('');
+    setHasSubmitted(true);
     
     if (!validateForm()) return;
     
@@ -105,14 +108,19 @@ const LoginPage = () => {
     try {
       const response = await api.post('/auth/login', {
         emailOrPhone: formData.emailOrPhone,
-        password: formData.password
+        password: formData.password,
+        rememberMe: rememberMe
       });
       
       // Handle successful login
       console.log('Login successful:', response.data);
       
       // Store the token
-      localStorage.setItem('token', response.data.token);
+      if (rememberMe) {
+        localStorage.setItem('token', response.data.token);
+      } else {
+        sessionStorage.setItem('token', response.data.token);
+      }
       
       // Redirect to dashboard or home page
       navigate('/dashboard');
@@ -132,103 +140,136 @@ const LoginPage = () => {
 
   return (
     <div className="login-container">
-      <div className="login-card">
-        <div className="login-header">
-          <h1>{t('auth.welcomeBack')}</h1>
-          <p>{t('auth.loginText')}</p>
+      {/* Left Image Section */}
+      <div className="login-image-section">
+        <div className="image-overlay">
+          <div>
+            <img src="" alt="" />
+          <h2>Welcome to Docnish</h2>
+          <p>Your trusted healthcare companion</p>
+          </div>
         </div>
-        
-        {submitError && (
-          <div className="alert alert-error">
-            {submitError}
-          </div>
-        )}
-        
-        <form className="login-form" onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="emailOrPhone">
-              {t('auth.emailPhone')}
-              {inputType && <span className="input-type">Detected as: {inputType}</span>}
-            </label>
-            <input
-              type="text"
-              id="emailOrPhone"
-              name="emailOrPhone"
-              value={formData.emailOrPhone}
-              onChange={handleInputChange}
-              className={errors.emailOrPhone ? 'error' : ''}
-              placeholder="Enter your email or phone number"
-            />
-            {errors.emailOrPhone && <span className="error-message">{errors.emailOrPhone}</span>}
-          </div>
-          
-          <div className="form-group">
-            <label htmlFor="password">
-              {t('auth.password')}
-              <Link to="/forgot-password" className="forgot-password">{t('auth.forgotPassword')}</Link>
-            </label>
-            <div className="password-input-container">
-              <input
-                type={showPassword ? 'text' : 'password'}
-                id="password"
-                name="password"
-                value={formData.password}
-                onChange={handleInputChange}
-                className={`password-input ${errors.password ? 'error' : ''}`}
-                placeholder="Enter your password"
-              />
-              <button 
-                type="button" 
-                className="toggle-password"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
-              </button>
+      </div>
+      
+      {/* Right Form Section */}
+      <div className="login-form-section">
+        <div className="login-card">
+          {/* Docnish Logo */}
+          <div className="logo-section">
+            <div className="logo">
+              <span>DOCNISH</span>
             </div>
-            {errors.password && <span className="error-message">{errors.password}</span>}
           </div>
           
-          <button 
-            type="submit" 
-            className={`login-button ${isFormValid && !isSubmitting ? 'enabled' : 'disabled'}`}
-            disabled={!isFormValid || isSubmitting}
-          >
-            {isSubmitting ? 'Logging In...' : t('auth.loginButton')}
-          </button>
-        </form>
-        
-        <div className="divider">
-          <span>{t('auth.orContinueWith')}</span>
-        </div>
-        
-        <div className="social-login">
-          <button 
-            className="social-button google"
-            onClick={() => handleSocialLogin('Google')}
-          >
-            <FcGoogle />
-            <span>Google</span>
-          </button>
+          {/* Sign In Heading */}
+          <div className="login-header">
+            <h1>Sign In</h1>
+          </div>
           
-          <button 
-            className="social-button microsoft"
-            onClick={() => handleSocialLogin('Microsoft')}
-          >
-            <BsMicrosoft />
-            <span>Microsoft</span>
-          </button>
+          {submitError && (
+            <div className="alert alert-error">
+              {submitError}
+            </div>
+          )}
           
-          <button 
-            className="social-button apple"
-            onClick={() => handleSocialLogin('Apple')}
-          >
-            <BsApple />
-            <span>Apple</span>
-          </button>
-        </div>
-        
-        <div className="signup-link">
-          <p>{t('auth.dontHaveAccount')} <Link to="/signup">{t('auth.signupButton')}</Link></p>
+          <form className="login-form" onSubmit={handleSubmit}>
+            {/* Email or Phone Number Field */}
+            <div className="form-group">
+              <label htmlFor="emailOrPhone">
+                Email or Phone Number
+                {inputType && <span className="input-type">({inputType})</span>}
+              </label>
+              <input
+                type="text"
+                id="emailOrPhone"
+                name="emailOrPhone"
+                value={formData.emailOrPhone}
+                onChange={handleInputChange}
+                className={errors.emailOrPhone && hasSubmitted ? 'error' : ''}
+                placeholder="Enter your email or phone number"
+              />
+              {errors.emailOrPhone && hasSubmitted && <span className="error-message">{errors.emailOrPhone}</span>}
+            </div>
+            
+            {/* Password Field with Eye Icon */}
+            <div className="form-group">
+              <label htmlFor="password">Password</label>
+              <div className="password-input-container">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  id="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                  className={`password-input ${errors.password && hasSubmitted ? 'error' : ''}`}
+                  placeholder="Enter your password"
+                />
+                <button 
+                  type="button" 
+                  className="toggle-password"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+                </button>
+              </div>
+              {errors.password && hasSubmitted && <span className="error-message">{errors.password}</span>}
+            </div>
+            
+         
+            
+            
+            {/* Sign In Button */}
+            <button 
+              type="submit" 
+              className={`login-button ${isFormValid && !isSubmitting ? 'enabled' : 'disabled'}`}
+              disabled={!isFormValid || isSubmitting}
+            >
+              {isSubmitting ? 'Signing In...' : 'Sign In'}
+            </button>
+          </form>
+          
+          {/* Forgot Password */}
+          <div className="forgot-password-section">
+            <Link to="/forgot-password" className="forgot-password-link">
+              Forgot your password?
+            </Link>
+          </div>
+          
+          <div className="divider">
+            <span>or continue with</span>
+          </div>
+          
+          {/* Social Login Buttons */}
+          <div className="social-login">
+            <button 
+              className="social-button google"
+              onClick={() => handleSocialLogin('Google')}
+            >
+              <FcGoogle />
+              <span>Google</span>
+            </button>
+            
+            <button 
+              className="social-button microsoft"
+              onClick={() => handleSocialLogin('Microsoft')}
+            >
+              <BsMicrosoft />
+              <span>Microsoft</span>
+            </button>
+            
+            <button 
+              className="social-button apple"
+              onClick={() => handleSocialLogin('Apple')}
+            >
+              <BsApple />
+              <span>Apple</span>
+            </button>
+          </div>
+          
+          {/* Sign Up Link */}
+          <div className="signup-link">
+            <p>Don't have an account? <Link to="/signup">Sign up</Link></p>
+          </div>
         </div>
       </div>
     </div>

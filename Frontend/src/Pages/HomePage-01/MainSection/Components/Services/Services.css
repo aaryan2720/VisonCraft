@@ -1,0 +1,47 @@
+/* src/components/Services/Services.css */
+.services-container {
+  padding: 10px 20px;
+  max-width: screen;
+  margin: 0 70px;
+}
+
+.service-filters {
+  display: flex;
+  padding: 0 100px; /* 100px left and right padding */
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 20px;
+  perspective: 1000px;
+}
+
+.service-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 30px;
+  perspective: 1000px;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .service-filters {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .filter-item {
+    width: 100%;
+    max-width: 300px;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .service-cards {
+    grid-template-columns: 1fr;
+  }
+  
+  .services-container {
+    padding: 40px 15px;
+  }
+}

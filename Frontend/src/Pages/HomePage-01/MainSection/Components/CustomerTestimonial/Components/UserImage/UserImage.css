@@ -1,0 +1,15 @@
+/* src/components/CustomerTestimonial/UserImage/UserImage.css */
+.user-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden; /* Add this to ensure circular shape */
+    border: 3px solid #f0f0f0;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .user-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensure image fills the circle */
+  }

@@ -1,0 +1,12 @@
+/* src/components/CustomerTestimonial/TestimonialHeader/TestimonialHeader.css */
+.testimonial-header {
+    display: flex;
+    align-items: center; /* Center align vertically */
+    margin-bottom: 15px;
+  }
+  
+  .testimonial-user {
+    display: flex;
+    align-items: center;
+    width: 100%; /* Ensure full width */
+  }

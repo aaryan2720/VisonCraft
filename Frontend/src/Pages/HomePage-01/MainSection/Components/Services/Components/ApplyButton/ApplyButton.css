@@ -1,0 +1,46 @@
+/* src/components/Services/ApplyButton/ApplyButton.css */
+.apply-button {
+  margin-top: 1rem;
+    background-color: #FBB040;
+    color: #0D3E7E;
+    border: none;
+    padding: 12px 0;
+    border-radius: 50px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    width: 100%;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 3px 8px rgba(251, 176, 64, 0.3);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    text-align: center;
+    display: block;
+    text-decoration: none;
+  }
+  
+  .apply-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: all 0.5s ease;
+    z-index: -1;
+  }
+  
+  .apply-button:hover {
+    background-color: #f9a825;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(251, 176, 64, 0.4);
+    letter-spacing: 1px;
+  }
+  
+  .apply-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 5px rgba(251, 176, 64, 0.3);
+  }

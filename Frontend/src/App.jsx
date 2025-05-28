@@ -7,10 +7,10 @@ import SignupPage from './Pages/AuthenticationPages/SignupPage'
 import LoginPage from './Pages/AuthenticationPages/LoginPage'
 import CustomerDashboard from './Pages/Customer Dashboard/CustomerDashboard'
 import AdminCRM from './CRM Pages/AdminCrm'
-import Faqs from './Pages/HomePage-01/Footer/FooterComponents/Faqs';
-import HelpCenter from './Pages/HomePage-01/Footer/FooterComponents/HelpCenter';
-import ServicePolicy from './Pages/HomePage-01/Footer/FooterComponents/ServicePolicy';
-import PrivacyPolicy from './Pages/HomePage-01/Footer/FooterComponents/PrivacyPolicy';
+import Faqs from './Pages/HomePage-01/Footer/FooterPages/Faqs/Faqs';
+import HelpCenter from './Pages/HomePage-01/Footer/FooterPages/HelpCenter/HelpCenter';
+import ServicePolicy from './Pages/HomePage-01/Footer/FooterPages/ServicePolicy/ServicePolicy';
+import PrivacyPolicy from './Pages/HomePage-01/Footer/FooterPages/PrivacyPolicy/PrivacyPolicy';
 
 function App() {
   return (

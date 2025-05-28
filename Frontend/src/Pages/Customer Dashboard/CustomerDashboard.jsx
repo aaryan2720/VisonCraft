@@ -1,21 +1,30 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { FiUpload, FiDownload, FiClock, FiPhone, FiMessageSquare, FiCheckCircle, FiUser, FiFileText, FiChevronRight } from 'react-icons/fi';
-import { FaIndianRupeeSign } from 'react-icons/fa6';
+import { 
+  FiUpload, 
+  FiDownload, 
+  FiClock, 
+  FiPhone, 
+  FiMessageSquare, 
+  FiCheckCircle, 
+  FiUser, 
+  FiFileText, 
+  FiChevronRight,
+  FiHome,
+  FiSettings,
+  FiHelpCircle,
+  FiUsers,
+  FiTrendingUp,
+  FiBell,
+  FiSearch
+} from 'react-icons/fi';
 import './CustomerDashboard.css';
 
 const CustomerDashboard = () => {
   const [callbackRequested, setCallbackRequested] = useState(false);
   const [documents, setDocuments] = useState([]);
-  const [activeSection, setActiveSection] = useState(null);
+  const [activeNav, setActiveNav] = useState('overview');
   const [progressAnimated, setProgressAnimated] = useState(false);
   
-  // Create refs for each section
-  const statusRef = useRef(null);
-  const documentsRef = useRef(null);
-  const invoicesRef = useRef(null);
-  const messagesRef = useRef(null);
-  const helpRef = useRef(null);
-
   // Mock data
   const serviceStatus = {
     currentStep: 3,
@@ -33,17 +42,30 @@ const CustomerDashboard = () => {
   };
 
   const invoices = [
-    { id: 'INV-001', date: '15 May 2023', amount: '₹499' },
-    { id: 'INV-002', date: '20 May 2023', amount: '₹299' }
+    { id: 'INV-001', date: '15 May 2023', amount: '₹499', status: 'Paid' },
+    { id: 'INV-002', date: '20 May 2023', amount: '₹299', status: 'Paid' }
   ];
 
   const messages = [
-    { id: 1, from: 'Support Team', content: 'We have received your documents.', date: '17 May', read: true },
-    { id: 2, from: 'Document Specialist', content: 'Please upload clearer copy of address proof.', date: '18 May', read: false }
+    { id: 1, from: 'Support Team', content: 'We have received your documents and are processing them.', date: '17 May', read: true, type: 'info' },
+    { id: 2, from: 'Document Specialist', content: 'Please upload clearer copy of address proof.', date: '18 May', read: false, type: 'warning' }
+  ];
+
+  const stats = [
+    { title: 'Application Progress', value: '60%', change: '+12%', trend: 'up', icon: FiTrendingUp },
+    { title: 'Documents Uploaded', value: '4/6', change: '+2', trend: 'up', icon: FiFileText },
+    { title: 'Days Remaining', value: '14', change: '-3', trend: 'down', icon: FiClock },
+  ];
+
+  const navItems = [
+    { id: 'overview', label: 'Overview', icon: FiHome },
+    { id: 'documents', label: 'Documents', icon: FiFileText },
+    { id: 'messages', label: 'Messages', icon: FiMessageSquare, badge: '2' },
+    { id: 'invoices', label: 'Invoices', icon: FiDownload },
+    { id: 'customers', label: 'Profile', icon: FiUsers },
   ];
 
   useEffect(() => {
-    // Animate progress bar on component mount
     const timer = setTimeout(() => {
       setProgressAnimated(true);
     }, 300);
@@ -64,313 +86,231 @@ const CustomerDashboard = () => {
     setTimeout(() => setCallbackRequested(false), 3000);
   };
 
-  // Toggle section view
-  const toggleSection = (section) => {
-    if (activeSection === section) {
-      setActiveSection(null);
-    } else {
-      setActiveSection(section);
-      // Scroll to section if not visible
-      setTimeout(() => {
-        const ref = getRefForSection(section);
-        if (ref.current) {
-          ref.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
-      }, 50);
-    }
-  };
-
-  const getRefForSection = (section) => {
-    switch(section) {
-      case 'status': return statusRef;
-      case 'documents': return documentsRef;
-      case 'invoices': return invoicesRef;
-      case 'messages': return messagesRef;
-      case 'help': return helpRef;
-      default: return statusRef;
-    }
-  };
-
-  const isSectionExpanded = (section) => {
-    return activeSection === section;
-  };
-
   return (
     <div className="dashboard-container">
-      {/* Navigation Menu */}
-      <nav className="dashboard-nav">
-        <button 
-          onClick={() => toggleSection('status')}
-          className={activeSection === 'status' ? 'active' : ''}
-        >
-          <FiCheckCircle /> Status
-        </button>
-        <button 
-          onClick={() => toggleSection('documents')}
-          className={activeSection === 'documents' ? 'active' : ''}
-        >
-          <FiUpload /> Documents
-        </button>
-        <button 
-          onClick={() => toggleSection('invoices')}
-          className={activeSection === 'invoices' ? 'active' : ''}
-        >
-          <FiDownload /> Invoices
-        </button>
-        <button 
-          onClick={() => toggleSection('messages')}
-          className={activeSection === 'messages' ? 'active' : ''}
-        >
-          <FiMessageSquare /> Messages
-        </button>
-        <button 
-          onClick={() => toggleSection('help')}
-          className={activeSection === 'help' ? 'active' : ''}
-        >
-          <FiPhone /> Help
-        </button>
-      </nav>
+      {/* Sidebar */}
+      <div className="sidebar">
+        {/* Logo/Brand */}
+        <div className="sidebar-header">
+          <div className="brand">
+            <div className="brand-logo">@</div>
+            <div className="brand-text">Your Company</div>
+          </div>
+        </div>
 
-      <div className="dashboard-header">
-        <h1><FiUser /> Welcome, Rahul Sharma</h1>
-        <p className="service-name"><FiFileText /> PAN Card Application</p>
+        {/* Navigation */}
+        <nav className="sidebar-nav">
+          {navItems.map(item => (
+            <button
+              key={item.id}
+              onClick={() => setActiveNav(item.id)}
+              className={`nav-item ${activeNav === item.id ? 'active' : ''}`}
+            >
+              <item.icon size={18} />
+              {item.label}
+              {item.badge && (
+                <span className="nav-badge">{item.badge}</span>
+              )}
+            </button>
+          ))}
+        </nav>
+
+        {/* Bottom section */}
+        <div className="sidebar-footer">
+          <button className="sidebar-footer-btn">
+            <FiSettings size={18} />
+            Settings
+          </button>
+          <button className="sidebar-footer-btn">
+            <FiHelpCircle size={18} />
+            Help
+          </button>
+        </div>
       </div>
 
-      {/* Dashboard Overview - All cards in one view */}
-      <div className="dashboard-overview">
-        {/* Status Card */}
-        <div 
-          ref={statusRef} 
-          className={`dashboard-card status-card ${isSectionExpanded('status') ? 'expanded' : ''}`}
-          onClick={() => toggleSection('status')}
-        >
-          <div className="card-header">
-            <h3><FiCheckCircle /> Application Status</h3>
-            <FiChevronRight className={`expand-icon ${isSectionExpanded('status') ? 'expanded' : ''}`} />
+      {/* Main Content */}
+      <div className="main-content">
+        {/* Header */}
+        <div className="main-header">
+          <div className="header-content">
+            <h1 className="page-title">Customer Dashboard</h1>
+            <p className="page-subtitle">
+              <FiUser size={16} />
+              Welcome back, Rahul Sharma
+            </p>
           </div>
           
-          <div className="card-content">
-            <div className="status-badge-container">
-              <div className="status-badge">{serviceStatus.status}</div>
-              {serviceStatus.documentsNeeded && (
-                <div className="documents-needed-badge">Documents Required</div>
-              )}
-            </div>
-            
-            <div className="progress-container">
-              <div className="progress-text">
-                Step {serviceStatus.currentStep} of {serviceStatus.totalSteps}
-              </div>
-              <div className="progress-bar">
-                <div 
-                  className={`progress-fill ${progressAnimated ? 'animated' : ''}`}
-                  style={{ width: `${(serviceStatus.currentStep / serviceStatus.totalSteps) * 100}%` }}
-                ></div>
-              </div>
-            </div>
+          <div className="header-actions">
+            <button className="header-btn">
+              <FiSearch size={18} />
+            </button>
+            <button className="header-btn notification-btn">
+              <FiBell size={18} />
+              <span className="notification-dot"></span>
+            </button>
           </div>
-
-          {isSectionExpanded('status') && (
-            <div className="expanded-content">
-              <div className="timeline">
-                {serviceStatus.steps.map(step => (
-                  <div key={step.id} className={`timeline-item ${step.completed ? 'completed' : ''} ${step.current ? 'current' : ''}`}>
-                    <div className="timeline-marker">
-                      {step.completed ? <FiCheckCircle /> : step.current ? <div className="current-marker"></div> : <div className="pending-marker"></div>}
-                    </div>
-                    <div className="timeline-content">
-                      <h4>{step.name}</h4>
-                      {step.date && <p>{step.date}</p>}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="completion-date">
-                <FiClock /> Estimated Completion: {serviceStatus.estimatedCompletion}
-              </div>
-            </div>
-          )}
         </div>
 
-        {/* Documents Card */}
-        <div 
-          ref={documentsRef} 
-          className={`dashboard-card documents-card ${isSectionExpanded('documents') ? 'expanded' : ''}`}
-          onClick={() => toggleSection('documents')}
-        >
-          <div className="card-header">
-            <h3><FiUpload /> Documents</h3>
-            <FiChevronRight className={`expand-icon ${isSectionExpanded('documents') ? 'expanded' : ''}`} />
+        {/* Service Info Banner */}
+        <div className="service-banner">
+          <FiFileText size={24} />
+          <div className="service-info">
+            <h3 className="service-title">PAN Card Application</h3>
+            <p className="service-details">
+              Application ID: PAN2023-001234 • Status: {serviceStatus.status}
+            </p>
           </div>
-          
-          <div className="card-content">
-            <div className="upload-summary">
-              <div className="upload-count">
-                {documents.length} {documents.length === 1 ? 'document' : 'documents'} uploaded
+        </div>
+
+        {/* Stats Cards */}
+        <div className="stats-grid">
+          {stats.map((stat, index) => (
+            <div key={index} className="stat-card">
+              <div className="stat-icon">
+                <stat.icon size={24} />
               </div>
-              <div className="upload-action">
-                <FiUpload /> Upload
+              <div className="stat-content">
+                <div className="stat-label">{stat.title}</div>
+                <div className="stat-value">{stat.value}</div>
+                <div className={`stat-change ${stat.trend}`}>
+                  <FiTrendingUp size={12} />
+                  {stat.change} this week
+                </div>
               </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Main Content Grid */}
+        <div className="content-grid">
+          {/* Application Progress */}
+          <div className="progress-card">
+            <div className="card-header">
+              <h3 className="card-title">Application Progress</h3>
+              <button className="view-details-btn">View Details</button>
+            </div>
+
+            {/* Progress Timeline */}
+            <div className="timeline">
+              {serviceStatus.steps.map((step, index) => (
+                <div key={step.id} className="timeline-item">
+                  {/* Timeline Line */}
+                  {index < serviceStatus.steps.length - 1 && (
+                    <div className={`timeline-line ${step.completed ? 'completed' : ''}`}></div>
+                  )}
+                  
+                  {/* Step Marker */}
+                  <div className={`timeline-marker ${step.completed ? 'completed' : step.current ? 'current' : 'pending'}`}>
+                    {step.completed ? (
+                      <FiCheckCircle size={14} />
+                    ) : step.current ? (
+                      <div className="current-dot"></div>
+                    ) : null}
+                  </div>
+                  
+                  {/* Step Content */}
+                  <div className="timeline-content">
+                    <h4 className={`step-name ${step.completed || step.current ? 'active' : ''}`}>
+                      {step.name}
+                    </h4>
+                    {step.date && (
+                      <p className="step-date">{step.date}</p>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="completion-info">
+              <FiClock size={16} />
+              <span>Estimated Completion: {serviceStatus.estimatedCompletion}</span>
             </div>
           </div>
 
-          {isSectionExpanded('documents') && (
-            <div className="expanded-content">
+          {/* Right Column */}
+          <div className="sidebar-widgets">
+            {/* Document Upload */}
+            <div className="widget-card">
+              <h3 className="widget-title">Document Upload</h3>
+              
               <div className="upload-area">
                 <label className="upload-label">
-                  <input type="file" onChange={handleFileUpload} multiple />
-                  <FiUpload className="upload-icon" />
-                  <span>Click to Upload Documents</span>
-                  <p className="upload-hint">(You can upload multiple files at once)</p>
+                  <input 
+                    type="file" 
+                    onChange={handleFileUpload} 
+                    multiple 
+                    className="upload-input"
+                  />
+                  <FiUpload size={24} />
+                  <span className="upload-text">Click to upload</span>
                 </label>
               </div>
-              
+
               {documents.length > 0 && (
                 <div className="uploaded-files">
-                  <h4>Uploaded Files:</h4>
-                  <ul>
-                    {documents.map((doc, index) => (
-                      <li key={index}>
-                        <span>{doc.name}</span>
-                        <button onClick={(e) => { e.stopPropagation(); removeDocument(index); }}>×</button>
-                      </li>
-                    ))}
-                  </ul>
+                  <h4 className="files-title">Uploaded Files ({documents.length})</h4>
+                  {documents.slice(0, 3).map((doc, index) => (
+                    <div key={index} className="file-item">
+                      <span className="file-name">
+                        {doc.name.length > 20 ? doc.name.substring(0, 20) + '...' : doc.name}
+                      </span>
+                      <button 
+                        onClick={() => removeDocument(index)}
+                        className="remove-file-btn"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))}
                 </div>
               )}
-
-              <div className="required-documents">
-                <h4>Documents Needed:</h4>
-                <ul>
-                  <li>Aadhaar Card (Front & Back)</li>
-                  <li>Passport Photo</li>
-                  <li>Signature Proof</li>
-                  <li>Address Proof</li>
-                </ul>
-              </div>
             </div>
-          )}
-        </div>
 
-        {/* Invoices Card */}
-        <div 
-          ref={invoicesRef} 
-          className={`dashboard-card invoices-card ${isSectionExpanded('invoices') ? 'expanded' : ''}`}
-          onClick={() => toggleSection('invoices')}
-        >
-          <div className="card-header">
-            <h3><FiDownload /> Payment Receipts</h3>
-            <FiChevronRight className={`expand-icon ${isSectionExpanded('invoices') ? 'expanded' : ''}`} />
-          </div>
-          
-          <div className="card-content">
-            <div className="invoices-summary">
-              <div className="invoice-count">
-                {invoices.length} {invoices.length === 1 ? 'invoice' : 'invoices'} available
+            {/* Recent Messages */}
+            <div className="widget-card">
+              <div className="widget-header">
+                <h3 className="widget-title">Recent Messages</h3>
+                <span className="unread-badge">
+                  {messages.filter(m => !m.read).length} new
+                </span>
               </div>
-              <div className="total-amount">
-                <FaIndianRupeeSign /> 798 total
-              </div>
-            </div>
-          </div>
 
-          {isSectionExpanded('invoices') && (
-            <div className="expanded-content">
-              {invoices.map(invoice => (
-                <div key={invoice.id} className="invoice-item">
-                  <div className="invoice-info">
-                    <h4>Invoice #{invoice.id}</h4>
-                    <p>Date: {invoice.date}</p>
-                  </div>
-                  <div className="invoice-amount">
-                    <FaIndianRupeeSign /> {invoice.amount}
-                  </div>
-                  <button className="download-btn" onClick={(e) => e.stopPropagation()}>
-                    <FiDownload /> Download
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Messages Card */}
-        <div 
-          ref={messagesRef} 
-          className={`dashboard-card messages-card ${isSectionExpanded('messages') ? 'expanded' : ''}`}
-          onClick={() => toggleSection('messages')}
-        >
-          <div className="card-header">
-            <h3><FiMessageSquare /> Messages</h3>
-            <FiChevronRight className={`expand-icon ${isSectionExpanded('messages') ? 'expanded' : ''}`} />
-          </div>
-          
-          <div className="card-content">
-            <div className="messages-summary">
-              <div className="unread-count">
-                {messages.filter(m => !m.read).length} unread
-              </div>
-              <div className="latest-message">
-                Latest: {messages[0].from} - {messages[0].content.substring(0, 30)}...
-              </div>
-            </div>
-          </div>
-
-          {isSectionExpanded('messages') && (
-            <div className="expanded-content">
-              {messages.map(message => (
-                <div key={message.id} className={`message-item ${!message.read ? 'unread' : ''}`}>
+              {messages.slice(0, 2).map(message => (
+                <div key={message.id} className="message-item">
                   <div className="message-header">
-                    <div>
-                      <h4>{message.from}</h4>
-                      <p>{message.content}</p>
-                    </div>
-                    <div className="message-meta">
-                      <span>{message.date}</span>
-                      {!message.read && <span className="new-badge">New</span>}
-                    </div>
+                    <span className="message-from">{message.from}</span>
+                    <span className="message-date">{message.date}</span>
                   </div>
+                  <p className="message-content">
+                    {message.content.length > 60 
+                      ? message.content.substring(0, 60) + '...' 
+                      : message.content}
+                  </p>
+                  {!message.read && <div className="unread-indicator"></div>}
                 </div>
               ))}
             </div>
-          )}
-        </div>
 
-        {/* Help Card */}
-        <div 
-          ref={helpRef} 
-          className={`dashboard-card help-card ${isSectionExpanded('help') ? 'expanded' : ''}`}
-          onClick={() => toggleSection('help')}
-        >
-          <div className="card-header">
-            <h3><FiPhone /> Need Help?</h3>
-            <FiChevronRight className={`expand-icon ${isSectionExpanded('help') ? 'expanded' : ''}`} />
-          </div>
-          
-          <div className="card-content">
-            <div className="help-summary">
-              Click to request callback or view contact information
-            </div>
-          </div>
-
-          {isSectionExpanded('help') && (
-            <div className="expanded-content">
-              <p>Our team is ready to assist you with your application</p>
+            {/* Quick Actions */}
+            <div className="widget-card">
+              <h3 className="widget-title">Quick Actions</h3>
+              
               <button 
-                className={`help-button ${callbackRequested ? 'requested' : ''}`}
-                onClick={(e) => { e.stopPropagation(); requestCallback(); }}
+                onClick={requestCallback}
                 disabled={callbackRequested}
+                className={`callback-btn ${callbackRequested ? 'requested' : ''}`}
               >
-                <FiPhone /> {callbackRequested ? 'We Will Call You Soon' : 'Request Callback'}
+                <FiPhone size={16} />
+                {callbackRequested ? 'Callback Requested' : 'Request Callback'}
               </button>
+
               <div className="contact-info">
-                <p>Or call us directly:</p>
-                <h3>+91 1800 123 4567</h3>
-                <p>Available 9AM-6PM, Monday to Saturday</p>
+                <p className="contact-text">Or call us directly:</p>
+                <strong className="contact-number">+91 1800 123 4567</strong>
+                <p className="contact-hours">Mon-Sat, 9AM-6PM</p>
               </div>
             </div>
-          )}
+          </div>
         </div>
       </div>
     </div>

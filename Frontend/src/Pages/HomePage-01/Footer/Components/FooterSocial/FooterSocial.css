@@ -1,0 +1,36 @@
+.footer-social {
+    flex: 1;
+    min-width: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+  
+  .footer-social h3 {
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    color: #FBB040;
+  }
+  
+  .social-icons {
+    display: flex;
+    gap: 15px;
+  }
+  
+  .social-icons a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    color: #fff;
+    transition: all 0.3s ease;
+  }
+  
+  .social-icons a:hover {
+    background-color: #FBB040;
+    color: #0D3E7E;
+    transform: translateY(-3px);
+  }

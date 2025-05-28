@@ -6,35 +6,49 @@ const LanguageSelector = () => {
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
   const { language, changeLanguage } = useLanguage();
 
-  const getLanguageName = (code) => {
-    switch(code) {
-      case 'en': return 'English';
-      case 'hi': return 'Hindi';
-      case 'mr': return 'Marathi';
-      default: return 'English';
-    }
-  };
+  const languages = [
+    { code: 'en', name: 'English' },
+    { code: 'mr', name: 'Marathi' },
+    { code: 'hi', name: 'Hindi' }
+  ];
 
   const handleLanguageChange = (langCode) => {
     changeLanguage(langCode);
     setShowLanguageDropdown(false);
   };
 
+  const toggleDropdown = (e) => {
+    e.stopPropagation();
+    setShowLanguageDropdown(!showLanguageDropdown);
+  };
+
   return (
     <div className="language-selector">
-      <span className="language-text"></span>
-      <button 
-        className="language-button"
-        onClick={() => setShowLanguageDropdown(!showLanguageDropdown)}
-      >
-        {getLanguageName(language)} <span className="dropdown-arrow">▼</span>
-      </button>
+      <div className="language-display">
+        <span className="language-text">
+          {languages.find(lang => lang.code === language)?.name}
+        </span>
+        <button 
+          className="dropdown-toggle"
+          onClick={toggleDropdown}
+        >
+          <span className="dropdown-arrow">▼</span>
+        </button>
+      </div>
       
       {showLanguageDropdown && (
         <div className="language-dropdown">
-          <div onClick={() => handleLanguageChange('en')}>English</div>
-          <div onClick={() => handleLanguageChange('hi')}>Hindi</div>
-          <div onClick={() => handleLanguageChange('mr')}>Marathi</div>
+          {languages
+            .filter(lang => lang.code !== language)
+            .map((lang) => (
+              <div 
+                key={lang.code}
+                onClick={() => handleLanguageChange(lang.code)}
+                className="language-option"
+              >
+                {lang.name}
+              </div>
+            ))}
         </div>
       )}
     </div>

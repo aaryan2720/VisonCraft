@@ -1,0 +1,13 @@
+/* src/components/CustomerTestimonial/TestimonialService/TestimonialService.css */
+.testimonial-service {
+    margin: 15px 0;
+    color: #666;
+    font-size: 0.95rem;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .testimonial-service span {
+    color: #0D3E7E;
+    font-weight: 600;
+  }

@@ -1,6 +1,6 @@
 import React from 'react'
-import Services from './Components/Services.jsx'
-import CustomerTestomonial from "./Components/CustomerTestomonial.jsx"
+import Services from './Components/Services/Services.jsx'
+import CustomerTestomonial from "./Components/CustomerTestimonial/Components/CustomerTestimonial/CustomerTestimonial.jsx"
 
 const MainSection = () => {
   return (

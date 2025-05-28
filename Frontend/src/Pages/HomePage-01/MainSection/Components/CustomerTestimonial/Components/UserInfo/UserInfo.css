@@ -1,0 +1,17 @@
+/* src/components/CustomerTestimonial/UserInfo/UserInfo.css */
+.user-info {
+    margin-left: 15px;
+  }
+  
+  .user-name {
+    margin: 0;
+    color: #0D3E7E;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+  
+  .days-ago {
+    margin: 5px 0 0;
+    color: #888;
+    font-size: 0.85rem;
+  }
