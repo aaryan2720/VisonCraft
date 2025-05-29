@@ -71,13 +71,16 @@ const register = asyncHandler(async (req, res, next) => {
         name: user.name,
         email: user.email,
         phone: user.phone,
-        userType: user.userType
+        userType: user.userType,
+        isAdmin: user.isAdmin
       }
     }
   });
 });
+
 const login = asyncHandler(async (req, res, next) => {
   const { emailOrPhone, password } = req.body;
+  console.log('Login attempt with:', { emailOrPhone });
 
   // 1) Check if email/phone and password exist
   if (!emailOrPhone || !password) {
@@ -85,25 +88,43 @@ const login = asyncHandler(async (req, res, next) => {
   }
 
   // 2) Check if user exists
-  const user = await User.findOne({
+  let user = await User.findOne({
     $or: [
-      { email: emailOrPhone.includes('@') ? emailOrPhone : null },
+      { email: emailOrPhone.includes('@') ? emailOrPhone.toLowerCase() : null },
       { phone: emailOrPhone.match(/^\d+$/) ? emailOrPhone : null }
     ]
   }).select('+password');
+
+  if (user) {
+    // Convert Mongoose document to plain object to ensure all fields are accessible
+    user = user.toObject();
+  }
+
+  console.log('User found:', user ? 'Yes' : 'No');
+  if (user) {
+    console.log('User object details:', {
+      hasPassword: !!user.password,
+      passwordLength: user.password?.length,
+      fields: Object.keys(user)
+    });
+  }
 
   if (!user) {
     return next(new ApiError('Invalid credentials', 401));
   }
 
   // 3) Check if password is correct
+  console.log('Comparing passwords...');
   const isPasswordCorrect = await user.comparePassword(password);
+  console.log('Password correct:', isPasswordCorrect);
+
   if (!isPasswordCorrect) {
     return next(new ApiError('Invalid credentials', 401));
   }
 
   // 4) Generate token and send response
   const token = generateToken(user._id);
+  console.log('Token generated successfully');
 
   res.status(200).json({
     success: true,
@@ -114,13 +135,14 @@ const login = asyncHandler(async (req, res, next) => {
         name: user.name,
         email: user.email,
         phone: user.phone,
-        userType: user.userType
+        userType: user.userType,
+        isAdmin: user.isAdmin
       }
     }
   });
 });
 
 module.exports = {
-  register, // from previous implementation
+  register,
   login
 };

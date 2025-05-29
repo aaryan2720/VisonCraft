@@ -1,0 +1,217 @@
+*{
+  margin-left: 15px;
+}
+
+body {
+      font-family: Arial, sans-serif;
+      background-color: #ffffff;
+    }
+
+    /* ===== Header ===== */
+    .header {
+      background-color: #0d3e7e;
+      color: #ffffff;
+      text-align: center;
+      padding: 10px 0;
+      position: relative;
+    }
+    .logo {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #ffffff;
+    }
+
+    /* ===== Search Bar ===== */
+    .search-bar {
+      background-color: #0d3e7e;
+      padding: 10px 0;
+      text-align: center;
+    }
+    .search-bar input {
+      width: 80%;
+      max-width: 500px;
+      padding: 8px;
+      border: 1px solid #e0e0e0;
+      background-color: white;
+      border-radius: 4px;
+    }
+
+    /* ===== About Section ===== */
+    .about-section {
+      padding: 20px;
+      text-align: center;
+      color: black;
+    }
+    .about-section h1 {
+      margin: 0;
+      font-size: 2em;
+    }
+
+    /* ===== Posts Container ===== */
+    .posts-container {
+      display: flex;
+      justify-content: space-between;
+      padding: 20px;
+      gap: 20px;
+      flex-wrap: wrap;
+      color: black;
+    }
+    .posts-left {
+      flex: 2;
+      min-width: 300px;
+    }
+    .posts-right {
+      flex: 1;
+      padding-left: 20px;
+      min-width: 250px;
+    }
+
+    /* ===== View Toggle Buttons ===== */
+    .view-toggle {
+      margin-left: 26px;
+      margin-bottom: 10px;
+    }
+    .view-toggle button {
+      background-color: #e0e0e0;
+      border: none;
+      padding: 8px 16px;
+      margin: 0 5px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .view-toggle button.active {
+      background-color: #0d3e7e;
+      color: #ffffff;
+    }
+
+    /* ===== Posts Grid/List Views ===== */
+    .posts-grid.grid-view {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    .posts-grid.list-view {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    /* ===== Post Card ===== */
+    .post-card {
+      background-color: #e0e0e0;
+      padding: 15px;
+      border-radius: 8px;
+    }
+    .post-card h3 {
+      margin: 0 0 10px;
+    }
+
+    /* ===== Featured Media Section ===== */
+    .featured-media-section {
+      padding: 0 20px 20px 20px;
+    }
+    .featured-media-section h3 {
+      margin: 0 0 10px;
+    }
+    .media-placeholder {
+      background-color: #e0e0e0;
+      height: 212px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9em;
+      color: #666;
+    }
+
+    /* ===== Sidebar Sections ===== */
+    .sidebar-section {
+      background-color: #e0e0e0;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+    }
+    .sidebar-section h3 {
+      margin: 0 0 10px;
+    }
+    .sidebar-section ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .sidebar-section ul li {
+      margin: 5px 0;
+    }
+
+    /* ===== Newsletter Section ===== */
+    .newsletter-section input {
+      display: block;
+      width: 100%;
+      padding: 8px;
+      margin: 10px 0;
+      border: 1px solid #e0e0e0;
+      background-color: white;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    .newsletter-section button {
+      background-color: #fbb040;
+      color: #ffffff;
+      border: none;
+      margin-right: 5px;
+      padding: 10px 20px;
+      font-size: 1em;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 90%;
+    }
+
+    /* ===== Alerts Section ===== */
+    .alerts-section {
+      background-color: #0d3e7e;
+      color: #ffffff;
+      padding: 10px;
+      text-align: center;
+    }
+    .alerts-section h3 {
+      margin: 0 0 5px;
+      font-size: 1.2em;
+    }
+    .alerts-section input {
+      width: 80%;
+      max-width: 200px;
+      padding: 6px;
+      margin: 5px 0;
+      background-color: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+    }
+    .alerts-section button {
+      background-color: #FBB040;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      font-size: 0.9em;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 768px) {
+      .posts-container {
+        flex-direction: column;
+      }
+      .posts-right {
+        padding-left: 0;
+      }
+      .view-toggle {
+        margin-left: 0;
+        text-align: center;
+      }
+    }

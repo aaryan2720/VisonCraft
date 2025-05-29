@@ -7,7 +7,10 @@ const SignupButton = () => {
   const { t } = useTranslation();
   
   return (
-    <Link to="/signup" className="signup-button">{t('navbar.signup')}</Link>
+    <a href="/signup" className="signup-button" title="Sign Up">
+      <i className="fas fa-user-plus"></i>
+      <span className="button-text">Sign Up</span>
+    </a>
   );
 };
 

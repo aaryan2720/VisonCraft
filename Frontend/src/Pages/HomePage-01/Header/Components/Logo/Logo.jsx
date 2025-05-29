@@ -5,7 +5,8 @@ import './Logo.css';
 const Logo = () => {
   return (
     <div className="navbar-logo">
-      <img src="https://images.rawpixel.com/image_png_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA4L2pvYjExMTMtZWxlbWVudC0yLXAucG5n.png"alt="DocNish Logo" className="logo-image" />
+      <h1>DocNish</h1>
+      {/* <img src="https://images.rawpixel.com/image_png_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA4L2pvYjExMTMtZWxlbWVudC0yLXAucG5n.png"alt="DocNish Logo" className="logo-image" /> */}
     </div>
   );
 };

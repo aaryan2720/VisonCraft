@@ -1,5 +1,5 @@
 
-
+import React from 'react'
 import { Routes, Route } from 'react-router-dom'
 import HomePage from './Pages/HomePage-01/HomePage'
 import ApplyNowPage from './Pages/ApplyNowPage/ApplyNowPage'
@@ -25,6 +25,7 @@ function App() {
       <Route path="/help-center" element={<HelpCenter />} />
       <Route path="/privacy-policy" element={<PrivacyPolicy />} />
       <Route path="/service-policy" element={<ServicePolicy />} />
+      
     </Routes>
   )
 }

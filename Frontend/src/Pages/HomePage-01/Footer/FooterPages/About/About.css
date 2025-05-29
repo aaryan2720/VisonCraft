@@ -1,0 +1,104 @@
+.about-container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 2rem;
+    font-family: sans-serif;
+    color: #0D3E7E;
+  }
+  
+  /* Hero Section */
+  .hero-section {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 3rem;
+  }
+  .hero-text {
+    flex: 1;
+  }
+  .hero-text h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+  .hero-media {
+    flex: 1;
+    text-align: center;
+  }
+  .hero-media img, .hero-media video {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+  }
+  
+  /* Mission & Vision */
+  .mission-vision {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+  }
+  .panel {
+    flex: 1;
+    background-color: #E0E0E0;
+    padding: 1.5rem;
+    border-left: 5px solid #FBB040;
+    border-radius: 8px;
+  }
+  
+  /* Timeline */
+  .timeline {
+    margin-bottom: 3rem;
+  }
+  .timeline-container {
+    display: flex;
+    gap: 2rem;
+    overflow-x: auto;
+    padding-bottom: 1rem;
+  }
+  .timeline-item {
+    min-width: 200px;
+    background: #F5F5F5;
+    padding: 1rem;
+    border-left: 5px solid #0D3E7E;
+    border-radius: 6px;
+  }
+  .timeline-item span {
+    font-weight: bold;
+  }
+  
+  /* Leadership */
+  .leadership {
+    margin-bottom: 3rem;
+  }
+  .team-grid {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+  .team-member {
+    text-align: center;
+  }
+  .team-member img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 1rem;
+  }
+  
+  /* Values & Culture */
+  .values-culture {
+    margin-bottom: 3rem;
+  }
+  .values-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 2rem;
+  }
+  .value-item {
+    text-align: center;
+  }
+  .value-item span {
+    font-size: 2rem;
+  }
+  

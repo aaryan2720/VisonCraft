@@ -13,7 +13,12 @@ const FilterItem = ({ filter, active, onClick }) => {
         <div className="filter-icon">
           {filter.icon}
         </div>
-        <span className="filter-name">{filter.fullName || filter.name}</span>
+        <span className="filter-name">
+          <span className="desktop-text">{filter.fullName || filter.name}</span>
+          <span className="mobile-text">
+            {(filter.fullName || filter.name).replace(/\s*Document\s*/gi, '')}
+          </span>
+        </span>
       </div>
     </div>
   );

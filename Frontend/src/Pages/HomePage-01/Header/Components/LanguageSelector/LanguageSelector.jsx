@@ -7,9 +7,9 @@ const LanguageSelector = () => {
   const { language, changeLanguage } = useLanguage();
 
   const languages = [
-    { code: 'en', name: 'English' },
-    { code: 'mr', name: 'Marathi' },
-    { code: 'hi', name: 'Hindi' }
+    { code: 'en', name: 'English' , letter: 'E'  },
+    { code: 'mr', name: 'Marathi', letter: 'M' },
+    { code: 'hi', name: 'Hindi', letter: 'H' }
   ];
 
   const handleLanguageChange = (langCode) => {

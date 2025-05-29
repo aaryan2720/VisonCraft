@@ -15,6 +15,83 @@
   perspective: 1000px;
 }
 
+
+
+.service-filters.expanded {
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 100%;
+}
+
+.service-filters::-webkit-scrollbar {
+  display: none;
+}
+
+/* Filter Expand Button Styles */
+.filter-expand-button {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 10px 20px;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+  border: 2px solid #FBB040;
+  background-color: #f0f2f5;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  color: #000000;
+  flex-shrink: 0;
+  white-space: nowrap;
+  gap: 8px;
+}
+
+.expand-icon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  transition: transform 0.3s ease;
+}
+
+.expand-text {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.filter-expand-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, rgba(13, 62, 126, 0.1), rgba(251, 176, 64, 0.1));
+  z-index: -1;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.4s ease;
+}
+
+.filter-expand-button:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
+  border-color: #0D3E7E;
+}
+
+.filter-expand-button:hover::before {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.filter-expand-button:hover .expand-icon {
+  transform: scale(1.2) rotate(90deg);
+}
+
 .service-cards {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -22,26 +99,140 @@
   perspective: 1000px;
 }
 
+/* View More/Less Button Styles */
+.view-more-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.view-more-button,
+.view-less-button {
+  background: linear-gradient(45deg, #0D3E7E, #FBB040);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(13, 62, 126, 0.3);
+}
+
+.view-more-button:hover,
+.view-less-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(13, 62, 126, 0.4);
+}
+
+.view-less-button {
+  background: linear-gradient(45deg, #FBB040, #0D3E7E);
+}
+
 /* Responsive Styles */
 @media (max-width: 768px) {
-  .service-filters {
-    flex-direction: column;
-    align-items: center;
+  .services-container {
+    margin: 0 20px;
+    padding: 10px 10px;
   }
-  
-  .filter-item {
-    width: 100%;
-    max-width: 300px;
+
+  .service-filters {
+    padding: 0 5px;
+    gap: 8px;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .service-filters.expanded {
+    flex-wrap: wrap;
     justify-content: center;
+    overflow-x: visible;
+  }
+
+  .service-filters::-webkit-scrollbar {
+    display: none;
+  }
+
+  .filter-expand-button {
+    padding: 8px 12px;
+    border-radius: 15px;
+  }
+
+  .expand-icon {
+    width: 16px;
+    height: 16px;
+    font-size: 1.2rem;
+  }
+
+  .expand-text {
+    font-size: 12px;
+  }
+
+  .service-cards {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+  }
+
+  .view-more-button,
+  .view-less-button {
+    font-size: 14px;
+    padding: 10px 20px;
   }
 }
 
 @media (max-width: 480px) {
+  .services-container {
+    margin: 0 10px;
+    padding: 10px 5px;
+  }
+
+  .service-filters {
+    padding: 0 2px;
+    gap: 6px;
+    justify-content: flex-start;
+  }
+
+  .service-filters.expanded {
+    justify-content: center;
+  }
+
+  .filter-expand-button {
+    padding: 6px 10px;
+    border-radius: 12px;
+    gap: 6px;
+  }
+
+  .expand-icon {
+    width: 14px;
+    height: 14px;
+    font-size: 1rem;
+  }
+
+  .expand-text {
+    font-size: 11px;
+  }
+
   .service-cards {
     grid-template-columns: 1fr;
+    gap: 15px;
   }
-  
-  .services-container {
-    padding: 40px 15px;
+
+  .view-more-button,
+  .view-less-button {
+    font-size: 13px;
+    padding: 8px 18px;
+    width: 100%;
+    max-width: 280px;
+  }
+}
+
+@media (max-width: 360px) {
+  .service-filters {
+    padding: 0 1px;
+    gap: 4px;
   }
 }

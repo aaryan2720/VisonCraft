@@ -242,7 +242,7 @@ input.error {
   color: #0D3E7E;
   border: none;
   padding: 18px;
-  border-radius: 10px;
+  border-radius: 50px  !important;;
   font-weight: 700;
   font-size: 1.1rem;
   cursor: pointer;
@@ -251,6 +251,7 @@ input.error {
   text-transform: uppercase;
   letter-spacing: 0.5px;
   box-shadow: 0 4px 15px rgba(251, 176, 64, 0.3);
+  width: 100% !important;
 }
 
 .signup-button.enabled:hover {
