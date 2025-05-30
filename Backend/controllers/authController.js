@@ -1,4 +1,4 @@
-const User = require('../models/User');
+const { User } = require('../models/User');
 const asyncHandler = require('express-async-handler');
 const ApiError = require('../utils/apiError');
 const generateToken = require('../utils/generateToken');
@@ -88,26 +88,14 @@ const login = asyncHandler(async (req, res, next) => {
   }
 
   // 2) Check if user exists
-  let user = await User.findOne({
+  const user = await User.findOne({
     $or: [
       { email: emailOrPhone.includes('@') ? emailOrPhone.toLowerCase() : null },
       { phone: emailOrPhone.match(/^\d+$/) ? emailOrPhone : null }
     ]
   }).select('+password');
 
-  if (user) {
-    // Convert Mongoose document to plain object to ensure all fields are accessible
-    user = user.toObject();
-  }
-
   console.log('User found:', user ? 'Yes' : 'No');
-  if (user) {
-    console.log('User object details:', {
-      hasPassword: !!user.password,
-      passwordLength: user.password?.length,
-      fields: Object.keys(user)
-    });
-  }
 
   if (!user) {
     return next(new ApiError('Invalid credentials', 401));

@@ -41,8 +41,13 @@ app.use(globalErrorHandler);
 const PORT = process.env.PORT || 5000;
 
 // Connect to database and then start server
+const { createDefaultAdmin } = require('./models/User');
+
 connectDB()
-  .then(() => {
+  .then(async () => {
+    // Create default admin user if not exists
+    await createDefaultAdmin();
+    
     app.listen(PORT, () => {
       console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
     });

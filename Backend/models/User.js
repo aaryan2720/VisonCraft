@@ -100,7 +100,7 @@ const createDefaultAdmin = async () => {
   try {
     const adminExists = await User.findOne({ email: 'admindocnish24@visioncraft.com' }).select('+password');
     if (!adminExists) {
-      const plainPassword = 'docnish@2024';
+      const plainPassword = '123456789';
       const salt = await bcrypt.genSalt(12);
       const hashedPassword = await bcrypt.hash(plainPassword, salt);
       console.log('Creating admin with:', {
@@ -131,6 +131,8 @@ const createDefaultAdmin = async () => {
   }
 };
 
-createDefaultAdmin();
-
-module.exports = User;
+// Export both the User model and createDefaultAdmin function
+module.exports = {
+  User,
+  createDefaultAdmin
+};
