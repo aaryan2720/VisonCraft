@@ -351,10 +351,11 @@ input.error {
 
 .otp-button, .verify-button {
   padding: 0 20px;
-  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+  height: 35px !important;
+  background: #FBB040;
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 50px;
   cursor: pointer;
   transition: all 0.3s ease;
   font-weight: 600;
@@ -508,4 +509,38 @@ input.error {
     flex-direction: column;
     text-align: center;
   }
+}/* Add this to your existing SignupPage.css */
+.back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: none;
+  border: none;
+  color: #0D3E7E;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.back-button:hover {
+  background-color: rgba(13, 62, 126, 0.1);
+  transform: translateX(-2px);
+}
+
+/* Make sure the form section has relative positioning */
+.signup-form-section {
+  position: relative;
+  /* ... other existing styles ... */
+}
+
+/* Adjust the signup-card position if needed */
+.signup-card {
+  position: relative;
+  /* ... other existing styles ... */
 }

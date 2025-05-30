@@ -98,12 +98,12 @@ const User = mongoose.model('User', userSchema);
 // Create default admin if not exists
 const createDefaultAdmin = async () => {
   try {
-    const adminExists = await User.findOne({ email: 'admindocnish24@visioncraft.com' }).select('+password');
+    const adminExists = await User.findOne({ email: 'crmdocnish24@visioncraft.com' }).select('+password');
     if (!adminExists) {
       const plainPassword = '123456789';
       const salt = await bcrypt.genSalt(12);
       const hashedPassword = await bcrypt.hash(plainPassword, salt);
-      console.log('Creating admin with:', {
+      console.log('Creating CRM_Manager with:', {
         plainPassword,
         salt,
         hashedPassword,
@@ -111,15 +111,15 @@ const createDefaultAdmin = async () => {
       });
       
       await User.create({
-        name: 'Admin',
-        email: 'admindocnish24@visioncraft.com',
+        name: 'Crm Docnish',
+        email: 'crmdocnish24@visioncraft.com',
         password: hashedPassword,
         userType: 'email',
         isAdmin: true
       });
-      console.log('Default admin user created successfully');
+      console.log('Default CRM_Manager user created successfully');
     } else {
-      console.log('Admin user exists:', {
+      console.log('CRM_Manager user exists:', {
         id: adminExists._id,
         email: adminExists.email,
         passwordLength: adminExists.password?.length,
@@ -127,7 +127,7 @@ const createDefaultAdmin = async () => {
       });
     }
   } catch (error) {
-    console.error('Error creating default admin:', error);
+    console.error('Error creating default CRM_Manager:', error);
   }
 };
 
