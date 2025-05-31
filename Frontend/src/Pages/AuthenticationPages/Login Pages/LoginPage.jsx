@@ -1,21 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './LoginPage.css';
-import api from '../../../services/api';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import api from '../../../services/api';
+import './LoginPage.css';
 
 // Import components
 import BackButton from './components/BackButton/BackButton';
-import ImageSection from './components/ImageSection/ImageSection';
-import LogoSection from './components/LogoSection/LogoSection';
-import LoginHeader from './components/LoginHeader/LoginHeader';
-import EmailPhoneInput from './components/EmailPhoneInput/EmailPhoneInput';
-import PasswordInput from './components/PasswordInput/PasswordInput';
-import LoginButton from './components/LoginButton/LoginButton';
-import ForgotPasswordLink from './components/ForgotPasswordLink/ForgotPasswordLink';
 import Divider from './components/Divider/Divider';
-import SocialButtons from './components/SocialButtons/SocialButtons';
+import EmailPhoneInput from './components/EmailPhoneInput/EmailPhoneInput';
+import ForgotPasswordLink from './components/ForgotPasswordLink/ForgotPasswordLink';
+import ImageSection from './components/ImageSection/ImageSection';
+import LoginButton from './components/LoginButton/LoginButton';
+import LoginHeader from './components/LoginHeader/LoginHeader';
+import LogoSection from './components/LogoSection/LogoSection';
+import PasswordInput from './components/PasswordInput/PasswordInput';
 import SignUpLink from './components/SignUpLink/SignUpLink';
+import SocialButtons from './components/SocialButtons/SocialButtons';
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({
@@ -113,17 +113,32 @@ const LoginPage = () => {
         rememberMe: rememberMe
       });
       
+      const { token, data: { user } } = response.data;
+      console.log('Login response:', response.data); // Debug log
+
       if (rememberMe) {
-        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('token', token);
+        localStorage.setItem('user', JSON.stringify(user));
       } else {
-        sessionStorage.setItem('token', response.data.token);
+        sessionStorage.setItem('token', token);
+        sessionStorage.setItem('user', JSON.stringify(user));
       }
       
-      navigate('/dashboard');
+      if (user.role === 'crm') {
+        navigate('/crm');
+      } else {
+        navigate('/dashboard');
+      }
       
     } catch (error) {
       console.error('Login error:', error);
-      setSubmitError(error.response?.data?.message || 'Login failed. Please try again.');
+      if (error.response && error.response.data) {
+        setSubmitError(error.response.data.message);
+      } else if (error.message) {
+        setSubmitError(error.message);
+      } else {
+        setSubmitError('Login failed. Please try again.');
+      }
     } finally {
       setIsSubmitting(false);
     }

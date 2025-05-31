@@ -3,7 +3,6 @@ import React from 'react';
 import './TestimonialHeader.css';
 import UserImage from '../UserImage/UserImage';
 import UserInfo from '../UserInfo/UserInfo';
-
 const TestimonialHeader = ({ name, image, daysAgo }) => {
   return (
     <div className="testimonial-header">

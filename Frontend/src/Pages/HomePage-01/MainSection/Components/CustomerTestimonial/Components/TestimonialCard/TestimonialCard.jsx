@@ -14,10 +14,11 @@ const TestimonialCard = ({ testimonial }) => {
       <div className="testimonial-card">
         <TestimonialHeader 
           name={testimonial.name} 
+          
           image={testimonial.image} 
           daysAgo={testimonial.daysAgo} 
         />
-        <TestimonialRating rating={testimonial.rating} />
+       
         <TestimonialService service={testimonial.service} />
         <p className="testimonial-feedback">
           {t(`${testimonial.feedback}`)}

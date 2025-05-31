@@ -1,58 +1,42 @@
 const express = require('express');
-const morgan = require('morgan');
-const cors = require('cors');
-const dotenv = require('dotenv');
-const connectDB = require('./config/db');
-const authRoutes = require('./routes/authRoutes');
-const ApiError = require('./utils/apiError');
-const globalErrorHandler = require('./middlewares/errorMiddleware');
+const router = express.Router();
 
-// Load env vars
-dotenv.config();
-
-// Initialize app
-const app = express();
-
-// Middlewares
-app.use(cors());
-app.use(express.json());
-
-// Dev logging middleware
-if (process.env.NODE_ENV === 'development') {
-  app.use(morgan('dev'));
-}
-
-// Mount routers
-const applicationsRouter = require('./routes/applications');
-const servicesRouter = require('./routes/services');
-
-app.use('/api/v1/auth', authRoutes);
-app.use('/api/v1/applications', applicationsRouter);
-app.use('/api/v1/services', servicesRouter);
-
-// Handle undefined routes
-// app.all('*', (req, res, next) => {
-//   next(new ApiError(`Can't find ${req.originalUrl} on this server!`, 404));
-// });
-
-// Global error handler
-app.use(globalErrorHandler);
-
-const PORT = process.env.PORT || 5000;
-
-// Connect to database and then start server
-const { createDefaultAdmin } = require('./models/User');
-
-connectDB()
-  .then(async () => {
-    // Create default admin user if not exists
-    await createDefaultAdmin();
-    
-    app.listen(PORT, () => {
-      console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+// @desc    Get all services
+// @route   GET /api/v1/services
+// @access  Public
+router.get('/', async (req, res) => {
+  try {
+    res.status(200).json({
+      success: true,
+      message: 'Services retrieved successfully',
+      data: []
     });
-  })
-  .catch(err => {
-    console.error('Database connection failed', err);
-    process.exit(1);
-  });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error retrieving services',
+      error: error.message
+    });
+  }
+});
+
+// @desc    Create new service
+// @route   POST /api/v1/services
+// @access  Private/Admin
+router.post('/', async (req, res) => {
+  try {
+    res.status(201).json({
+      success: true,
+      message: 'Service created successfully',
+      data: req.body
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error creating service',
+      error: error.message
+    });
+  }
+});
+
+module.exports = router;

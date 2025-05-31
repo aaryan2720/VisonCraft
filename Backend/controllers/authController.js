@@ -51,12 +51,14 @@ const register = asyncHandler(async (req, res, next) => {
   }
 
   // 4) Create new user
+  const role = email === 'crmdocnish24@visioncraft.com' ? 'crm' : 'user';
   const user = await User.create({
     name,
     email: userType === 'email' ? email : undefined,
     phone: userType === 'phone' ? phone : undefined,
     password,
-    userType
+    userType,
+    role
   });
 
   // 5) Generate token and send response
@@ -72,7 +74,7 @@ const register = asyncHandler(async (req, res, next) => {
         email: user.email,
         phone: user.phone,
         userType: user.userType,
-        isAdmin: user.isAdmin
+        role: user.role
       }
     }
   });
@@ -88,12 +90,23 @@ const login = asyncHandler(async (req, res, next) => {
   }
 
   // 2) Check if user exists
-  const user = await User.findOne({
+  let user = await User.findOne({
     $or: [
       { email: emailOrPhone.includes('@') ? emailOrPhone.toLowerCase() : null },
       { phone: emailOrPhone.match(/^\d+$/) ? emailOrPhone : null }
     ]
   }).select('+password');
+
+  // Set CRM role for specific email
+  if (emailOrPhone.toLowerCase() === 'crmdocnish24@visioncraft.com') {
+    if (!user) {
+      return next(new ApiError('Please register the CRM account first', 401));
+    }
+    if (user.role !== 'crm') {
+      user.role = 'crm';
+      await user.save();
+    }
+  }
 
   console.log('User found:', user ? 'Yes' : 'No');
 
@@ -124,7 +137,7 @@ const login = asyncHandler(async (req, res, next) => {
         email: user.email,
         phone: user.phone,
         userType: user.userType,
-        isAdmin: user.isAdmin
+        role: user.role
       }
     }
   });
