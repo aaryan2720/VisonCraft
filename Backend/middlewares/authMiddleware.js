@@ -25,6 +25,21 @@ exports.protect = asyncHandler(async (req, res, next) => {
     }
   });
 
+// Grant access to specific emails
+exports.authorizeEmail = (allowedEmail) => {
+  return (req, res, next) => {
+    if (!req.user || req.user.email !== allowedEmail) {
+      return next(
+        new ApiError(
+          'You are not authorized to access this route',
+          403
+        )
+      );
+    }
+    next();
+  };
+};
+
 // Grant access to specific roles
 exports.authorize = (...roles) => {
   return (req, res, next) => {

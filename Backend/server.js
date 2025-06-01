@@ -15,11 +15,21 @@ const app = express();
 
 // Middlewares
 app.use(cors({
-  origin: process.env.NODE_ENV === 'development' ? 'http://localhost:5173' : process.env.FRONTEND_URL,
+  origin: function (origin, callback) {
+    if (process.env.NODE_ENV === 'development') {
+      if (!origin || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+    } else if (origin === process.env.FRONTEND_URL) {
+      return callback(null, true);
+    }
+    return callback(new Error('Not allowed by CORS'));
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
 
 // Body parser
 app.use(express.json({ limit: '10kb' }));
@@ -43,10 +53,15 @@ if (process.env.NODE_ENV === 'development') {
 // Mount routers
 const applicationsRouter = require('./routes/applications');
 const servicesRouter = require('./routes/services');
+const { protect, authorizeEmail } = require('./middlewares/authMiddleware');
 
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/applications', applicationsRouter);
 app.use('/api/v1/services', servicesRouter);
+
+// Protected routes with email-based access control
+app.use('/api/v1/crm', protect, authorizeEmail('crmdocnish24@visioncraft.com'), applicationsRouter);
+app.use('/api/v1/admin', protect, authorizeEmail('admindocnish24@visioncraft.com'), servicesRouter);
 
 // Handle undefined routes
 app.all('*', (req, res, next) => {

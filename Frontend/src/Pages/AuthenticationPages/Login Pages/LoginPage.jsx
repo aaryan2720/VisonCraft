@@ -114,9 +114,20 @@ const LoginPage = () => {
       });
       
       if (response.data.success) {
-        const storage = rememberMe ? localStorage : sessionStorage;
-        storage.setItem('token', response.data.token);
-        storage.setItem('user', JSON.stringify(response.data.data.user));
+        // Store token and user data
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('user', JSON.stringify(response.data.data.user));
+        
+        // Redirect based on user email
+        const userEmail = response.data.data.user.email;
+        if (userEmail === 'crmdocnish24@visioncraft.com') {
+          navigate('/crm');
+        } else if (userEmail === 'admindocnish24@visioncraft.com') {
+          navigate('/admin');
+        } else {
+          navigate('/dashboard');
+        }
+        return;
       }
       
       navigate('/dashboard');
