@@ -11,10 +11,12 @@ const registerValidation = [
     .notEmpty()
     .withMessage('Name is required')
     .isLength({ max: 50 })
-    .withMessage('Name must be less than 50 characters'),
+    .withMessage('Name must be less than 50 characters')
+    .trim(),
   check('emailOrPhone')
     .notEmpty()
-    .withMessage('Email or phone number is required'),
+    .withMessage('Email or phone number is required')
+    .trim(),
   check('password')
     .notEmpty()
     .withMessage('Password is required')
@@ -23,6 +25,17 @@ const registerValidation = [
   check('confirmPassword')
     .notEmpty()
     .withMessage('Please confirm your password')
+    .custom((value, { req }) => {
+      if (value !== req.body.password) {
+        throw new Error('Passwords do not match');
+      }
+      return true;
+    }),
+  check('userType')
+    .notEmpty()
+    .withMessage('User type is required')
+    .isIn(['email', 'phone'])
+    .withMessage('Invalid user type')
 ];
 
 // Apply validation middleware correctly

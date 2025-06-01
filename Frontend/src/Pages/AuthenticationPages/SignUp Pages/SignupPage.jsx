@@ -1,17 +1,17 @@
 // src/components/signup/SignupForm.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { IoArrowBack } from "react-icons/io5";
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../../../services/api';
-import SignupImageSection from './components/SignupImageSection';
-import FormGroup from './components/FormGroup';
-import PasswordInput from './components/PasswordInput';
-import EmailPhoneInput from './components/EmailPhoneInput';
-import OTPVerification from './components/OTPVerification';
-import SocialSignupButtons from './components/SocialSignupButtons';
-import SignupButton from './components/SignupButton';
 import Alert from './components/Alert';
+import EmailPhoneInput from './components/EmailPhoneInput';
+import FormGroup from './components/FormGroup';
+import OTPVerification from './components/OTPVerification';
+import PasswordInput from './components/PasswordInput';
+import SignupButton from './components/SignupButton';
+import SignupImageSection from './components/SignupImageSection';
+import SocialSignupButtons from './components/SocialSignupButtons';
 import './SignupPage.css';
-import { IoArrowBack } from "react-icons/io5";
 
 const SignupPage = () => {
   const [formData, setFormData] = useState({
@@ -165,30 +165,66 @@ const SignupPage = () => {
     setHasAttemptedSubmit(true);
     setSubmitError('');
     
-    if (!validateForm()) return;
+    if (!validateForm()) {
+      console.log('Form validation failed:', errors);
+      return;
+    }
     
-    if (!otpVerified) {
-      setSubmitError('Please verify your email/phone with OTP first');
+    if (!otpVerified && inputType === 'phone') {
+      console.log('OTP verification required for phone signup');
+      setSubmitError('Please verify your phone number with OTP first');
       return;
     }
     
     setIsSubmitting(true);
     
     try {
+      console.log('Submitting registration form:', { 
+        name: formData.name,
+        emailOrPhone: formData.emailOrPhone,
+        userType: inputType
+      });
+
       const response = await api.post('/auth/register', {
         name: formData.name,
         emailOrPhone: formData.emailOrPhone,
         password: formData.password,
-        confirmPassword: formData.confirmPassword
+        confirmPassword: formData.confirmPassword,
+        userType: inputType
       });
       
-      localStorage.setItem('token', response.data.token);
-      navigate('/dashboard');
+      console.log('Registration response:', response.data);
+      
+      if (response.data.token) {
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+        navigate('/dashboard');
+      } else {
+        throw new Error('Registration successful but no token received');
+      }
       
     } catch (error) {
-      setSubmitError(error.response?.data?.message || 'Registration failed. Please try again.');
+      console.error('Registration error:', error);
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to create account';
+      console.log('Setting error message:', errorMessage);
+      setSubmitError(errorMessage);
+      
+      // Reset form state if needed
+      if (error.response?.status === 409) { // Conflict - user already exists
+        setFormData({
+          ...formData,
+          emailOrPhone: '',
+          password: '',
+          confirmPassword: ''
+        });
+      }
     } finally {
       setIsSubmitting(false);
+    }
+    
+    // Show error message if present
+    if (submitError) {
+      console.log('Form submission error:', submitError);
     }
   };
 
@@ -285,11 +321,12 @@ const SignupPage = () => {
                 setShowPassword={setShowConfirmPassword}
               />
               
-              <SignupButton 
-                isFormValid={isFormValid}
-                isSubmitting={isSubmitting}
-                otpVerified={otpVerified}
-              />
+              <SignupButton
+              isFormValid={isFormValid}
+              isSubmitting={isSubmitting}
+              otpVerified={otpVerified}
+              inputType={inputType}
+            />
             </form>
             
             <div className="divider">

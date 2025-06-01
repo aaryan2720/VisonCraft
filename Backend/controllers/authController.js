@@ -7,39 +7,53 @@ const generateToken = require('../utils/generateToken');
 // @route   POST /api/v1/auth/register
 // @access  Public
 const register = asyncHandler(async (req, res, next) => {
-  const { name, emailOrPhone, password, confirmPassword } = req.body;
+  console.log('Registration attempt:', {
+    name: req.body.name,
+    emailOrPhone: req.body.emailOrPhone,
+    userType: req.body.userType
+  });
+
+  const { name, emailOrPhone, password, confirmPassword, userType: requestedUserType } = req.body;
   
-  // 1) Check if passwords match
-  if (password !== confirmPassword) {
-    return next(new ApiError('Passwords do not match', 400));
+  // 1) Validate user type matches email/phone format
+  let email, phone, userType;
+  const isEmail = emailOrPhone.includes('@');
+  const isPhone = /^\d{10}$/.test(emailOrPhone);
+
+  if (isEmail && requestedUserType !== 'email') {
+    return next(new ApiError('User type does not match email format', 400));
   }
 
-  // 2) Determine if input is email or phone
-  let email, phone, userType;
-  
-  if (emailOrPhone.includes('@')) {
+  if (isPhone && requestedUserType !== 'phone') {
+    return next(new ApiError('User type does not match phone format', 400));
+  }
+
+  // 2) Process and validate email/phone format
+  if (isEmail) {
     email = emailOrPhone.toLowerCase().trim();
     userType = 'email';
     
     if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
       return next(new ApiError('Please provide a valid email address', 400));
     }
-  } else {
+    console.log('Validated email format:', email);
+  } else if (isPhone) {
     phone = emailOrPhone.trim();
     userType = 'phone';
-    
-    if (!/^\d{10}$/.test(phone)) {
-      return next(new ApiError('Please provide a valid 10-digit phone number', 400));
-    }
+    console.log('Validated phone format:', phone);
+  } else {
+    return next(new ApiError('Invalid email or phone format', 400));
   }
 
   // 3) Check if user already exists
-  const existingUser = await User.findOne({
-    $or: [
-      { email: userType === 'email' ? email : null },
-      { phone: userType === 'phone' ? phone : null }
-    ]
-  });
+  console.log('Checking for existing user with:', { email, phone, userType });
+  
+  const query = userType === 'email' 
+    ? { email: email }
+    : { phone: phone };
+  
+  console.log('Executing query:', query);
+  const existingUser = await User.findOne(query);
   
   if (existingUser) {
     return next(new ApiError(
@@ -51,14 +65,12 @@ const register = asyncHandler(async (req, res, next) => {
   }
 
   // 4) Create new user
-  const role = email === 'crmdocnish24@visioncraft.com' ? 'crm' : 'user';
   const user = await User.create({
     name,
     email: userType === 'email' ? email : undefined,
     phone: userType === 'phone' ? phone : undefined,
     password,
-    userType,
-    role
+    userType
   });
 
   // 5) Generate token and send response
@@ -74,7 +86,7 @@ const register = asyncHandler(async (req, res, next) => {
         email: user.email,
         phone: user.phone,
         userType: user.userType,
-        role: user.role
+        isAdmin: user.isAdmin
       }
     }
   });
@@ -82,31 +94,33 @@ const register = asyncHandler(async (req, res, next) => {
 
 const login = asyncHandler(async (req, res, next) => {
   const { emailOrPhone, password } = req.body;
-  console.log('Login attempt with:', { emailOrPhone });
+  console.log('Login attempt:', { emailOrPhone });
 
   // 1) Check if email/phone and password exist
   if (!emailOrPhone || !password) {
+    console.log('Missing credentials');
     return next(new ApiError('Please provide email/phone and password', 400));
   }
 
-  // 2) Check if user exists
-  let user = await User.findOne({
-    $or: [
-      { email: emailOrPhone.includes('@') ? emailOrPhone.toLowerCase() : null },
-      { phone: emailOrPhone.match(/^\d+$/) ? emailOrPhone : null }
-    ]
-  }).select('+password');
-
-  // Set CRM role for specific email
-  if (emailOrPhone.toLowerCase() === 'crmdocnish24@visioncraft.com') {
-    if (!user) {
-      return next(new ApiError('Please register the CRM account first', 401));
-    }
-    if (user.role !== 'crm') {
-      user.role = 'crm';
-      await user.save();
-    }
+  // 2) Determine input type and format query
+  const isEmail = emailOrPhone.includes('@');
+  const isPhone = /^\d{10}$/.test(emailOrPhone);
+  
+  let query;
+  if (isEmail) {
+    query = { email: emailOrPhone.toLowerCase().trim() };
+    console.log('Searching by email:', query);
+  } else if (isPhone) {
+    query = { phone: emailOrPhone.trim() };
+    console.log('Searching by phone:', query);
+  } else {
+    console.log('Invalid email/phone format');
+    return next(new ApiError('Invalid email or phone format', 400));
   }
+
+  // 3) Check if user exists
+  console.log('Executing user query:', query);
+  const user = await User.findOne(query).select('+password');
 
   console.log('User found:', user ? 'Yes' : 'No');
 
@@ -137,7 +151,7 @@ const login = asyncHandler(async (req, res, next) => {
         email: user.email,
         phone: user.phone,
         userType: user.userType,
-        role: user.role
+        isAdmin: user.isAdmin
       }
     }
   });

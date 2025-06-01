@@ -113,32 +113,17 @@ const LoginPage = () => {
         rememberMe: rememberMe
       });
       
-      const { token, data: { user } } = response.data;
-      console.log('Login response:', response.data); // Debug log
-
-      if (rememberMe) {
-        localStorage.setItem('token', token);
-        localStorage.setItem('user', JSON.stringify(user));
-      } else {
-        sessionStorage.setItem('token', token);
-        sessionStorage.setItem('user', JSON.stringify(user));
+      if (response.data.success) {
+        const storage = rememberMe ? localStorage : sessionStorage;
+        storage.setItem('token', response.data.token);
+        storage.setItem('user', JSON.stringify(response.data.data.user));
       }
       
-      if (user.role === 'crm') {
-        navigate('/crm');
-      } else {
-        navigate('/dashboard');
-      }
+      navigate('/dashboard');
       
     } catch (error) {
       console.error('Login error:', error);
-      if (error.response && error.response.data) {
-        setSubmitError(error.response.data.message);
-      } else if (error.message) {
-        setSubmitError(error.message);
-      } else {
-        setSubmitError('Login failed. Please try again.');
-      }
+      setSubmitError(error.response?.data?.message || 'Login failed. Please try again.');
     } finally {
       setIsSubmitting(false);
     }

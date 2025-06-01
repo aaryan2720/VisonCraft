@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
-const { USER_TYPES } = require('../config/constants');
+const validator = require('validator');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -17,42 +17,43 @@ const userSchema = new mongoose.Schema({
     type: String,
     trim: true,
     lowercase: true,
-    unique: true,
-    sparse: true,
-    validate: {
-      validator: function(v) {
-        return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v);
-      },
-      message: 'Please provide a valid email address'
-    }
+    validate: [
+      validator.isEmail,
+      'Please provide a valid email address'
+    ]
   },
   phone: {
     type: String,
     trim: true,
-    unique: true,
-    sparse: true,
     validate: {
       validator: function(v) {
         return /^\d{10}$/.test(v);
       },
-      message: 'Please provide a valid 10-digit phone number'
+      message: props => `${props.value} is not a valid phone number!`
     }
   },
   password: {
     type: String,
     required: [true, 'Please provide a password'],
-    minlength: [8, 'Password must be at least 8 characters']
+    minlength: [8, 'Password must be at least 8 characters'],
+    select: false
   },
   userType: {
     type: String,
-    enum: Object.values(USER_TYPES),
-    required: true
+    required: [true, 'User type is required'],
+    enum: ['email', 'phone']
   },
   createdAt: {
     type: Date,
     default: Date.now
   }
+}, {
+  timestamps: true
 });
+
+// Create compound index for email and phone
+userSchema.index({ email: 1 }, { unique: true, sparse: true });
+userSchema.index({ phone: 1 }, { unique: true, sparse: true });
 
 // Encrypt password before saving
 userSchema.pre('save', async function(next) {
@@ -92,6 +93,19 @@ userSchema.methods.comparePassword = async function(candidatePassword) {
     return false;
   }
 };
+
+// Add pre-find hooks for debugging queries
+userSchema.pre(['find', 'findOne'], function() {
+  console.log('Executing query:', {
+    operation: this.op,
+    conditions: this.getQuery(),
+    collection: this.model.collection.name,
+    timestamp: new Date().toISOString()
+  });
+});
+
+// Create compound index for email/phone lookup optimization
+userSchema.index({ email: 1, phone: 1 }, { sparse: true });
 
 const User = mongoose.model('User', userSchema);
 
