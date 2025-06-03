@@ -1,5 +1,4 @@
 // src/components/signup/SignupButton.jsx
-import React from 'react';
 
 const SignupButton = ({ isFormValid, isSubmitting, otpVerified, inputType }) => {
   const isButtonEnabled = isFormValid && !isSubmitting && (inputType === 'email' || otpVerified);

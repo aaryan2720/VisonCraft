@@ -3,33 +3,33 @@ export const footerLinks = {
       { text: "Contact Us", path: "/contact-us" },
       { text: "About Us", path: "/about-us" },
       { text: "Careers", path: "/careers" },
-      { text: "Blog", path: "/blog" },
-      { text: "News & Updates", path: "/news" },
-      { text: "Corporate Information", path: "/corporate" },
-      { text: "Press", path: "/press" }
+      { text: "Blog And News", path: "/blog" },
+      // { text: "News & Updates", path: "/news" },
+      // { text: "Corporate Information", path: "/corporate" },
+      // { text: "Press", path: "/press" }
     ],
     groupCompanies: [
       { text: "Partner With Us", path: "/partner" },
       { text: "Download App", path: "/download-app" },
-      { text: "Trust Badges / Certifications", path: "/certifications" }
+      // { text: "Trust Badges / Certifications", path: "/certifications" }
     ],
     help: [
       { text: "Help Center", path: "/help-center" },
-      { text: "Payments", path: "/payments" },
-      { text: "Shipping", path: "/shipping" },
-      { text: "Cancellation & Returns", path: "/cancellation-returns" },
+      // { text: "Payments", path: "/payments" },
+      // { text: "Shipping", path: "/shipping" },
+      // { text: "Cancellation & Returns", path: "/cancellation-returns" },
       { text: "FAQs", path: "/faqs" },
-      { text: "Track Application", path: "/track" },
-      { text: "Request a Callback", path: "/callback" }
+      // { text: "Track Application", path: "/track" },
+      // { text: "Request a Callback", path: "/callback" }
     ],
     consumerPolicy: [
       { text: "Privacy Policy", path: "/privacy-policy" },
       { text: "Terms & Conditions", path: "/terms-conditions" },
-      { text: "Refund & Cancellation Policy", path: "/refund-policy" },
-      { text: "Security", path: "/security" },
-      { text: "Sitemap", path: "/sitemap" },
-      { text: "Grievance Redressal", path: "/grievance" },
-      { text: "EPR Compliance", path: "/epr-compliance" }
+      // { text: "Refund & Cancellation Policy", path: "/refund-policy" },
+      // { text: "Security", path: "/security" },
+      // { text: "Sitemap", path: "/sitemap" },
+      // { text: "Grievance Redressal", path: "/grievance" }
+      // { text: "EPR Compliance", path: "/epr-compliance" }
     ]
   };
   

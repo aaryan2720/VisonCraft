@@ -177,6 +177,11 @@ label {
   font-size: 0.95rem;
 }
 
+.country-code span {
+  color: #444;
+  font-weight: 500;
+}
+
 .country-code img {
   width: 20px;
   height: 15px;

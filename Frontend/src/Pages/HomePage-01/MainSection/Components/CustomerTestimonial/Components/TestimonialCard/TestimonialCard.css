@@ -264,3 +264,90 @@
         background-position: 0% 50%;
     }
 }
+
+/* src/components/CustomerTestimonial/TestimonialCard/TestimonialCard.css */
+
+/* ─── CARD CONTAINER ───────────────────────────────────────── */
+.testimonial-card {
+  background-color: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ─── HEADER + RATING ──────────────────────────────────────── */
+.testimonial-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* If TestimonialHeader has its own internal spacing, you can tweak here */
+}
+
+/* ─── SERVICE TAG ──────────────────────────────────────────── */
+.testimonial-service-wrapper {
+  /* Optional: margin, padding, or styling around the service bubble */
+}
+
+.testimonial-service {
+  display: inline-block;
+  background-color: #eef6ff;
+  color: #1e40af;
+  font-size: 0.875rem;
+  padding: 6px 12px;
+  border-radius: 999px;
+}
+
+/* ─── FEEDBACK TEXT ───────────────────────────────────────── */
+.testimonial-feedback-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Base style for feedback */
+.testimonial-feedback-text {
+  font-size: 0.95rem;
+  line-height: 1.4rem; /* Ensure we know the line-height for JS clamp detection */
+  color: #374151;
+  margin: 0;
+  transition: max-height 0.3s ease;
+}
+
+/* Clamp to 3 lines */
+.testimonial-feedback-text.clamped {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* When expanded, show full text */
+.testimonial-feedback-text.expanded {
+  display: block;
+  max-height: none;
+  overflow: visible;
+}
+
+/* ─── VIEW MORE / VIEW LESS BUTTON ───────────────────────── */
+.view-more-btn {
+  align-self: flex-start;
+  background: none;
+  border: none;
+  color: #2563eb;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  transition: color 0.2s ease;
+}
+
+.view-more-btn:hover {
+  color: #1e40af;
+}

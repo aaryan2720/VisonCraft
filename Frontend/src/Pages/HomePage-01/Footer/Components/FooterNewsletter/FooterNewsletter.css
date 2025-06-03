@@ -44,3 +44,15 @@
   .newsletter-form button:hover {
     background-color: #f9a825;
   }
+
+  .subscribe-btn{
+    background-color: #FBB040 !important;
+    color: #FBB040 !important;
+    border: none;
+    padding: 0 20px;
+    border-radius: 0 4px 4px 0;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  

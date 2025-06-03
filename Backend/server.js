@@ -11,11 +11,11 @@ const globalErrorHandler = require('./middlewares/errorMiddleware');
 dotenv.config();
 
 // Initialize app
-
 const app = express();
-const allowedOrigins = ['http://localhost:5173', 'http://127.0.0.1:5173'];
 
 // Middlewares
+const allowedOrigins = ['http://localhost:5173', 'http://127.0.0.1:5173'];
+
 app.use(cors({
   origin: function (origin, callback) {
     if (process.env.NODE_ENV === 'development') {
@@ -31,7 +31,6 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
-
 
 // Body parser
 app.use(express.json({ limit: '10kb' }));

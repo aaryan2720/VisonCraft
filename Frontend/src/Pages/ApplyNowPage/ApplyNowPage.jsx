@@ -296,7 +296,7 @@ const ApplyNowPage = () => {
               <label htmlFor="phoneNumber">Phone Number <span className="required">*</span></label>
               <div className="phone-input">
                 <div className="country-code">
-                  <img src="/assets/india-flag.png" alt="India" />
+                  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrIJbX-6MVfN4u1_xWs8A7eADfLg1lU9k7oA&s" alt="India" />
                   <span>+91</span>
                 </div>
                 <input 

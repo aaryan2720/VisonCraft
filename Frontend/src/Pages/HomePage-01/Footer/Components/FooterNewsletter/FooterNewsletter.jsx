@@ -11,7 +11,7 @@ const FooterNewsletter = () => {
       <p>{t('footer.newsletterSubtext')}</p>
       <div className="newsletter-form">
         <input type="email" placeholder={t('footer.emailPlaceholder')} />
-        <button type="submit">{t('footer.subscribe')}</button>
+        <button className='subscribe-btn' type="submit">{t('footer.subscribe')}</button>
       </div>
     </div>
   );
